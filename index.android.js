@@ -14,4 +14,4 @@ import {
 import App from './app/containers/app';
 
 
-AppRegistry.registerComponent('JubyController', () => App);
+AppRegistry.registerComponent('jubycontroller', () => App);
