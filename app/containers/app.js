@@ -1,21 +1,18 @@
-import React, { Component } from 'react';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import React from 'react';
+import { StackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import * as reducers from '../reducers';
-import Root from '../components/rootRouter';
+import { createStore } from 'redux';
+import HomeScreen from '../components/home';
+import AppReducer from '../reducers';
+import AppWithNavigationState from '../navigators/appNavigator';
 
-
-
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-const reducer = combineReducers(reducers);
-const store = createStoreWithMiddleware(reducer);
-
-export default class App extends Component {
+export default class App extends React.Component {
+  store = createStore(AppReducer);
+  
   render() {
     return (
-      <Provider store={store}>
-        <Root />
+      <Provider store={this.store}>
+        <AppWithNavigationState />
       </Provider>
     );
   }
