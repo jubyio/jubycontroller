@@ -8,16 +8,12 @@ class Home extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Welcomee',
     headerRight: <Button title='Setting'
-      onPress={() => dispatch(NavigationActions.navigate({ routeName: 'setting' }))}
+      onPress={() => navigation.navigate('Setting') }
     />,
   });
   render() {
     return <Text>Hello, Navigation!</Text>;
   }
-}
-
-Home.propTypes = {
-  dispatch: PropTypes.func.isRequired
 }
 
 export default Home;

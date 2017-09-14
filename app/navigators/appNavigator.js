@@ -11,17 +11,21 @@ export const AppNavigator = StackNavigator({
     Setting: { screen: Setting }
 });
 
-const AppWithNavigationState = ({ dispatch, nav }) => (
-    <AppNavigator navigation={addNavigationHelpers({
-        dispatch: this.props.dispatch,
-        state: this.props.nav,
-      })} />
-);
+class AppWithNavigationState extends React.Component {
+    render() {
+        const { dispatch, nav } = this.props;
+        const navigation = addNavigationHelpers({
+            dispatch,
+            state: nav
+        });
+        return <AppNavigator navigation={navigation} />;
+    }
+}
 
-AppWithNavigationState.propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    nav: PropTypes.object.isRequired,
-};
+// AppWithNavigationState.propTypes = {
+//     dispatch: PropTypes.func.isRequired,
+//     nav: PropTypes.object.isRequired,
+// };
 
 const mapStateToProps = state => ({
     nav: state.nav,
