@@ -3,14 +3,19 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 
-import HomeScreen from '../components/home';
+import Home from '../components/home';
+import Setting from '../components/setting';
 
 export const AppNavigator = StackNavigator({
-    Home: { screen: HomeScreen }
+    Home: { screen: Home },
+    Setting: { screen: Setting }
 });
 
 const AppWithNavigationState = ({ dispatch, nav }) => (
-    <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })} />
+    <AppNavigator navigation={addNavigationHelpers({
+        dispatch: this.props.dispatch,
+        state: this.props.nav,
+      })} />
 );
 
 AppWithNavigationState.propTypes = {
