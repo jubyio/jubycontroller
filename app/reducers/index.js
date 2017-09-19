@@ -7,7 +7,7 @@ var initialNavState = AppNavigator.router.getStateForAction('Home');
 function nav(state = initialNavState, action) {
     let nextState;
     switch (action.type) {
-        case 'home':
+        case 'controllers':
             break;
         default:
             nextState = AppNavigator.router.getStateForAction(action, state);

@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { Text, View, Button } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
-class Home extends React.Component {
+class Controllers extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Welcomee',
-    headerRight: <Button title='Setting'
+    title: 'Contrôleur',
+    headerRight: <Button title='Ajouter'
       onPress={() => navigation.navigate('Setting') }
     />,
   });
@@ -16,4 +16,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default Controllers;
