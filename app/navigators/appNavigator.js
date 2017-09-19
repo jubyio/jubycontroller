@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addNavigationHelpers, StackNavigator } from 'react-navigation';
+import { addNavigationHelpers, DrawerNavigator } from 'react-navigation';
 
 import Controllers from '../components/controllers';
 import Controller from '../components/controller';
 
-export const AppNavigator = StackNavigator({
+export const AppNavigator = DrawerNavigator({
     Controllers: { screen: Controllers },
-    Controller: { screen: Controller }
+    Controller: { screen: Controller}
 });
 
 class AppWithNavigationState extends React.Component {
