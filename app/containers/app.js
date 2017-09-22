@@ -1,16 +1,24 @@
 import React from 'react';
+import { AsyncStorage } from 'react-native'
 import { StackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, compose } from 'redux';
 import AppReducer from '../reducers';
 import AppWithNavigationState from '../navigators/appNavigator';
+import { persistStore, autoRehydrate } from 'redux-persist'
+
+const store = createStore(
+  AppReducer,
+  undefined,
+  compose(autoRehydrate()));
+
+persistStore(store, { storage: AsyncStorage });
 
 export default class App extends React.Component {
-  store = createStore(AppReducer);
-  
+
   render() {
     return (
-      <Provider store={this.store}>
+      <Provider store={store}>
         <AppWithNavigationState />
       </Provider>
     );
