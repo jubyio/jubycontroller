@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { BackHandler } from 'react-native';
-import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-navigation';
+import { addNavigationHelpers, DrawerNavigator, NavigationActions } from 'react-navigation';
 
-import Controllers from '../components/controllers';
-import Controller from '../components/controller';
+import GamepadsManager from '../containers/gamepadsManager';
+import GamepadManager from '../containers/gamepadManager';
 
-export const AppNavigator = StackNavigator({
-    Controllers: { screen: Controllers },
-    Controller: { screen: Controller }
+export const AppNavigator = DrawerNavigator({
+    Gamepads: { screen: GamepadsManager },
+    Gamepad: { screen: GamepadManager}
 });
 
 class AppWithNavigationState extends React.Component {
@@ -20,8 +20,8 @@ class AppWithNavigationState extends React.Component {
         BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
     }
     onBackPress = () => {
-        const { dispatch, nav } = this.props;
-        if (nav.index === 0) {
+        const { dispatch, navigation } = this.props;
+        if (navigation.index === 0) {
             return false;
         }
         dispatch(NavigationActions.back());
@@ -31,7 +31,7 @@ class AppWithNavigationState extends React.Component {
         const { dispatch, nav } = this.props;
         const navigation = addNavigationHelpers({
             dispatch,
-            state: nav
+            state: navigation
         });
         return <AppNavigator navigation={navigation} />;
     }
@@ -43,7 +43,7 @@ class AppWithNavigationState extends React.Component {
 // };
 
 const mapStateToProps = state => ({
-    nav: state.nav,
+    navigation: state.navigation,
 });
 
 export default connect(mapStateToProps)(AppWithNavigationState);
