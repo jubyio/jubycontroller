@@ -53,4 +53,4 @@ fastlane/Preview.html
 fastlane/screenshots
 
 # VSCode
-.vscode/.react
+# .vscode/.react
