@@ -15,14 +15,14 @@ class GamepadsScreen extends React.Component {
   // onPress={() => navigation.navigate('Gamepad')}
   render() {
     return (
-    <View style={styles.ßmain}>
-      <Header 
-        backgroundColor="#5a83ce"
-        centerComponent={{ text: 'GAMEPADS', style: { color: '#fff', fontSize: 18} }}
-        rightComponent={<RightButton navigation={this.props.navigation}/>}
-      />
-      <Text>Liste des controllers</Text>
-    </View>
+      <View style={styles.main}>
+        <Header
+          backgroundColor="#5a83ce"
+          centerComponent={{ text: 'GAMEPADS', style: { color: '#fff', fontSize: 18 } }}
+          rightComponent={<RightButton navigation={this.props.navigation} />}
+        />
+        <Text>Liste des controllers</Text>
+      </View>
     );
   }
   componentDidMount() {
@@ -32,7 +32,7 @@ class GamepadsScreen extends React.Component {
 
 const styles = StyleSheet.create({
   main: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center'
   },
@@ -41,13 +41,13 @@ const styles = StyleSheet.create({
   }
 });
 
-const RightButton = ({navigation}) => {
-  return(
-    <Button icon={{ icon: 'add-circle-outline', color: '#fff', fontSize: 15 }} onPress={(e)=> {
-      console.log(e);
-      console.log(navigation.navigate); 
-      navigation.navigate('GamePad')}
-      }></Button>
+const RightButton = ({ navigation }) => {
+  return (
+    <Button icon={{ icon: 'add-circle-outline', color: '#fff', fontSize: 15 }} onPress={() => {
+      console.log(navigation);
+      navigation.navigate('GamePad')
+    }
+    }></Button>
   )
 }
 
