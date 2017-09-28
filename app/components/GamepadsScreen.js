@@ -15,7 +15,7 @@ class GamepadsScreen extends React.Component {
   // onPress={() => navigation.navigate('Gamepad')}
   render() {
     return (
-    <View style={styles.main}>
+    <View style={styles.ßmain}>
       <Header 
         backgroundColor="#5a83ce"
         centerComponent={{ text: 'GAMEPADS', style: { color: '#fff', fontSize: 18} }}
@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
 
 const RightButton = ({navigation}) => {
   return(
-    <Button icon={{ icon: 'add-circle-outline', color: '#fff', fontSize: 15 }} onPress={()=> {
+    <Button icon={{ icon: 'add-circle-outline', color: '#fff', fontSize: 15 }} onPress={(e)=> {
+      console.log(e);
       console.log(navigation.navigate); 
       navigation.navigate('GamePad')}
       }></Button>
