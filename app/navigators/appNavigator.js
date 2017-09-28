@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import { BackHandler } from 'react-native';
 import { addNavigationHelpers, DrawerNavigator, NavigationActions } from 'react-navigation';
 
-import GamepadsManager from '../containers/gamepadsManager';
-import GamepadManager from '../containers/gamepadManager';
+import GamepadsScreen from '../components/GamepadsScreen';
+import GamepadScreen from '../components/GamepadScreen';
+//import GamepadsManager from '../containers/GamepadsManager';
 
 export const AppNavigator = DrawerNavigator({
-    Gamepads: { screen: GamepadsManager },
-    Gamepad: { screen: GamepadManager}
+    Gamepads: { screen: GamepadsScreen },
+    Gamepad: { screen: GamepadScreen}
 });
 
 class AppWithNavigationState extends React.Component {
@@ -20,8 +21,8 @@ class AppWithNavigationState extends React.Component {
         BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
     }
     onBackPress = () => {
-        const { dispatch, navigation } = this.props;
-        if (navigation.index === 0) {
+        const { dispatch, nav } = this.props;
+        if (nav.index === 0) {
             return false;
         }
         dispatch(NavigationActions.back());
@@ -31,19 +32,19 @@ class AppWithNavigationState extends React.Component {
         const { dispatch, nav } = this.props;
         const navigation = addNavigationHelpers({
             dispatch,
-            state: navigation
+            state: nav
         });
         return <AppNavigator navigation={navigation} />;
     }
 }
 
-// AppWithNavigationState.propTypes = {
-//     dispatch: PropTypes.func.isRequired,
-//     nav: PropTypes.object.isRequired,
-// };
+AppWithNavigationState.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    nav: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = state => ({
-    navigation: state.navigation,
+    nav: state.nav,
 });
 
 export default connect(mapStateToProps)(AppWithNavigationState);

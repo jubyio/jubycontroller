@@ -3,8 +3,8 @@ import { AsyncStorage } from 'react-native'
 import { StackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { createStore, compose } from 'redux';
-import AppReducer from '../reducers';
-import AppWithNavigationState from '../navigators/appNavigator';
+import AppReducer from './reducers';
+import AppWithNavigationState from './navigators/AppNavigator';
 import { persistStore, autoRehydrate } from 'redux-persist'
 
 const store = createStore(
