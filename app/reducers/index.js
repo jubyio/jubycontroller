@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 
-import { navigation } from './navigation';
-import { persist } from './persist';
+import nav from './Navigation';
+import persist from './Persist';
 
 const AppReducer = combineReducers({
-    navigation,
+    nav,
     persist
 });
 

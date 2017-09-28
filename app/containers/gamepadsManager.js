@@ -1,10 +1,11 @@
 import { addGamepad } from '../actions'
-import { Gamepads } from '../components/gamepads';
+import { GamepadsScreen } from '../components/GamepadsScreen';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
   return {
-    gamepads: state.gamepads
+    gamepads: state.gamepads,
+    ...props.navigation.state.params
   }
 }
 
@@ -19,7 +20,7 @@ const mapDispatchToProps = dispatch => {
 const GamepadsManager = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Gamepads)
+)(GamepadsScreen)
 
 export default GamepadsManager;
 

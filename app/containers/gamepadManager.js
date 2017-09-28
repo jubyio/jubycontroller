@@ -1,5 +1,5 @@
 import { addButton, addStick } from '../actions'
-import { Gamepad } from '../components/gamepad';
+import { GamepadScreen } from '../components/GamepadScreen';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
@@ -22,7 +22,7 @@ const mapDispatchToProps = dispatch => {
 const GamepadManager = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Gamepad)
+)(GamepadScreen)
 
 export default GamepadManager;
 

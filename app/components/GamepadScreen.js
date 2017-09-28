@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from "react-native";
 
-class Gamepad extends React.Component {
+class GamepadScreen extends React.Component {
   static navigationOptions = {
     title: 'Gamepad'
     
@@ -11,4 +11,4 @@ class Gamepad extends React.Component {
   }
 }
 
-export default Gamepad;
+export default GamepadScreen;
