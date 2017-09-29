@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Text, View, StatusBar, StyleSheet } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { Header, List, ListItem, Button } from 'react-native-elements';
+import NewGamepadButton from './NewGamepadButton';
 
 class GamepadsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -19,7 +20,7 @@ class GamepadsScreen extends React.Component {
         <Header
           backgroundColor="#5a83ce"
           centerComponent={{ text: 'GAMEPADS', style: { color: '#fff', fontSize: 18 } }}
-          rightComponent={<RightButton navigation={this.props.navigation} />}
+          rightComponent={<NewGamepadButton/>}
         />
         <Text>Liste des controllers</Text>
       </View>
@@ -41,14 +42,6 @@ const styles = StyleSheet.create({
   }
 });
 
-const RightButton = ({ navigation }) => {
-  return (
-    <Button icon={{ icon: 'add-circle-outline', color: '#fff', fontSize: 15 }} onPress={() => {
-      console.log(navigation);
-      navigation.navigate('GamePad')
-    }
-    }></Button>
-  )
-}
+
 
 export default GamepadsScreen;
