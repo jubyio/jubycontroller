@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, Dimensions } from "react-native";
-import { Button } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
 import GamepadEditor from './GamepadEditor';
 
 class GamepadScreen extends React.Component {
@@ -14,16 +14,13 @@ class GamepadScreen extends React.Component {
   }
 
   render() {
-    var { height, width } = Dimensions.get('window');
     return (
 
       <View style={styles.main}>
-        <GamepadEditor style={[styles.editor, { height: height, width: width }]} />
+        <GamepadEditor style={[styles.editor]} />
         <View style={styles.buttons}>
-          <Button backgroundColor="#b6bab4" icon={{ name: 'check', size: 30, color: '#66b23e', buttonStyle: styles.icon }}
-            onPress={() => this.props.navigation.dispatch({ type: 'Cancel' })}></Button>
-          <Button backgroundColor="#d1493c" icon={{ name: 'close', size: 30, color: '#66b23e' }}
-            onPress={() => this.props.navigation.dispatch({ type: 'Cancel' })}></Button>
+          <Icon containerStyle={{backgroundColor:'#61b7ed'}} style={styles.icon} name='check' size={30} color='#66b23e' onPress={() => this.props.navigation.dispatch({ type: 'Cancel' })}/>
+          <Icon containerStyle={{backgroundColor:'#61b7ed'}} style={styles.icon} name='close' size={30} color='#d64455' onPress={() => this.props.navigation.dispatch({ type: 'Cancel' })}/>
         </View>
       </View>
 
@@ -41,11 +38,11 @@ class GamepadScreen extends React.Component {
 
 const styles = {
   main: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    flex: 1,
-    backgroundColor: 'blue'
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   buttons: {
     flexDirection: 'row',
@@ -61,10 +58,15 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
+    margin:0,
     backgroundColor: 'yellow'
   },
   icon: {
-    margin: 0
+    width:40,
+    height:40
+  },
+  iconContainer:{
+    backgroundColor:'#61b7ed'
   }
 }
 
