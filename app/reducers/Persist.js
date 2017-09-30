@@ -1,6 +1,6 @@
 import { REHYDRATE } from 'redux-persist/constants'
 
-const persist = (state = [], action) => {
+const persist = (state = {}, action) => {
     switch (action.type) {
         case REHYDRATE:
             var incoming = action.payload.myReducer

@@ -6,7 +6,6 @@ import { addNavigationHelpers, DrawerNavigator, NavigationActions } from 'react-
 
 import GamepadsScreen from '../components/GamepadsScreen';
 import GamepadScreen from '../components/GamepadScreen';
-//import GamepadsManager from '../containers/GamepadsManager';
 
 export const AppNavigator = DrawerNavigator({
     Gamepads: { screen: GamepadsScreen },
