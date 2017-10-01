@@ -1,22 +1,42 @@
-import { ADD_GAMEPAD, ADD_BUTTON, ADD_STICK } from '../constants';
+import { SAVE_GAMEPAD, DELETE_GAMEPAD, LOCK_LANDSCAPE, UNLOCK_ORIENTATION } from '../constants';
+import uuid from 'uuid/v4';
 
-export const addGamepad = (gamepad) => {
+//Domaine
+export const saveGamepad = (gamepad) => {
     return {
-        type : ADD_GAMEPAD,
+        type: ADD_GAMEPAD,
         gamepad
     }
 }
 
-export const addButton = (button) => {
+export const deleteGamepad = (id) => {
     return {
-        type : ADD_BUTTON,
-        button
+        type: DELETE_GAMEPAD,
+        id
     }
 }
 
-export const addStick = (stick) => {
-    return {
-        type : ADD_STICK,
-        stick
+//Device
+export const lockToLandscape = () => (
+    { type: LOCK_LANDSCAPE }
+)
+
+export const unlockOrientation = () => (
+    { type: UNLOCK_ORIENTATION }
+)
+
+//Helpers
+export const initGamepad = () => ({
+    id: uuid(),
+    name: 'Nouveau gamepad',
+    controls: []
+})
+
+export const initControl = (type) => ({
+    id: uuid(),
+    type: type,
+    position: { 
+        x: 50, 
+        y: 50 
     }
-}
+})
