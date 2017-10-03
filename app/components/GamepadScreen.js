@@ -6,7 +6,7 @@ import GamepadEditor from './GamepadEditor';
 import Gamepad from './Gamepad';
 
 import { SAVE_GAMEPAD, CANCEL_GAMEPAD } from '../constants';
-import { saveGamepad } from '../actions';
+import { saveGamepad, unlockOrientation } from '../actions';
 
 class GamepadScreen extends React.Component {
   static navigationOptions = {
@@ -61,6 +61,8 @@ class GamepadScreen extends React.Component {
       this.props.navigation.dispatch(saveGamepad(this.gamepad))
     }
     this.props.navigation.goBack();
+    this.props.navigation.dispatch(unlockOrientation());
+
   }
 }
 
