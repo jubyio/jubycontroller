@@ -5,18 +5,17 @@ import { connect, } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { Header, List, ListItem, Icon } from 'react-native-elements';
 
-const GamepadList = ({ gamepads, navigation }) => {
-    return (
-        <List style={styles.list}>
-            {
-                gamepads.map((g, i) => (
-                    <ListItem title={g.name} key={i}
-                        onPress={() => navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isEdit: false, gamepad: g } }))} />
-                ))
-            }
-        </List>
-    )
-}
+const GamepadList = ({ gamepads, navigation }) => (
+    <List style={styles.list}>
+        {
+            gamepads.map((g, i) => (
+                <ListItem title={g.name} key={i}
+                    onPress={() => navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isEdit: false, gamepad: g } }))} />
+            ))
+        }
+    </List>
+)
+
 
 const styles = StyleSheet.create({
     list: {

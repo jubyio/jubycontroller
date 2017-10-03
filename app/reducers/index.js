@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 
 import nav from './Navigation';
-import persist from './Persist';
 import device from './Device';
 import domain from './Domain';
 import runtime from './Runtime';

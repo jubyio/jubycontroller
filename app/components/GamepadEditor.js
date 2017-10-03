@@ -48,7 +48,7 @@ class GamepadEditor extends React.Component {
         return (
             <View style={[styles.buttons, { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: '#a8a4a7' }]}>
                 <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, alignItems: 'stretch' }}>
-                    <Gamepad style={{ flex: 1, backgroundColor: 'red' }} gamepad={this.state.gamepad} />
+                    <Gamepad style={{ flex: 1, backgroundColor: 'red' }} gamepad={this.state.gamepad} isInEditMode={true} />
                 </View>
                 {/* <Gamepad style={[styles.gamepad, { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'blue' }]} gamepad={this.state.gamepad}/> */}
                 <Icon raised style={styles.padButton} name='videogame-asset' size={30} onPress={this.togglePadsMenu}></Icon>

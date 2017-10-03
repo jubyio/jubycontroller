@@ -36,7 +36,7 @@ export const initControl = (type) => ({
     id: uuid(),
     type: type,
     position: { 
-        x: 50, 
-        y: 50 
+        x: 150, 
+        y: 100 
     }
 })

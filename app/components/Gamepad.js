@@ -4,24 +4,58 @@ import { connect } from 'react-redux';
 import { View, StyleSheet } from 'react-native';
 
 import Stick from './Stick'
-import Button from './PadButton';
+import PadButton from './PadButton';
+import ControlWrapper from './ControlWrapper';
 import { ControlTypes } from '../constants';
 
-const Gamepad = ({ gamepad, isInEditMode = false }) => (
-    <View style={{ flex: 1}}>
-        {gamepad.controls.map((control) => {
-            if (control.type == ControlTypes.STICK) {
-                return(<Stick key={control.id} stick={control} style={[styles.control, {top: control.position.y, left: control.position.x}]}/>)
-            } else {
-                return(<Button key={control.id}  stick={control} style={[styles.control, {top: control.position.y, left: control.position.x}]}/>)
-            }
-        })}
-        {/* <Stick style={{position: 'absolute', top: 150, left: 150}}/> */}
-    </View>
-);
+class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) => {
+
+    constructor(props) {
+        super(props);
+    }
+
+    renderControl = (control) => {
+        if (control.type == ControlTypes.STICK) {
+            return (
+                <Stick stick={control} />)
+        } else {
+            return (<PadButton button={control} />)
+        }
+    }
+
+    renderWrapperControl = (control) => {
+        if (this.props.isInEditMode) {
+            return (
+                <ControlWrapper onChange={this.onChange}>
+                    {this.renderControl(control)}
+                </ControlWrapper>
+            )
+        } else {
+            return this.renderControl(control);
+        }
+    }
+
+    onChange = () => {
+
+    };
+
+    render() {
+        return (<View style={{ flex: 1 }}>
+            {this.props.gamepad.controls.map((control) => {
+                return (
+                    <View key={control.id} style={[{ position: 'absolute', top: control.position.y, left: control.position.x }]}>
+                        {this.renderWrapperControl(control)}
+                    </View>
+                )
+            })}
+            {/* <Stick style={{position: 'absolute', top: 150, left: 150}}/> */}
+        </View>);
+    };
+}
+
 
 const styles = StyleSheet.create({
-    control:{
+    control: {
         position: 'absolute'
     }
 });
