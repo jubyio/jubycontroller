@@ -1,12 +1,13 @@
 import React from 'react';
 import { Text, View, Dimensions, StyleSheet } from "react-native";
 import { Button, Icon } from 'react-native-elements';
+import update from 'immutability-helper';
 
 import GamepadEditor from './GamepadEditor';
 import Gamepad from './Gamepad';
 
 import { SAVE_GAMEPAD, CANCEL_GAMEPAD } from '../constants';
-import { saveGamepad, unlockOrientation } from '../actions';
+import { saveGamepad, lockToLandscape, unlockOrientation } from '../actions';
 
 class GamepadScreen extends React.Component {
   static navigationOptions = {
@@ -16,8 +17,15 @@ class GamepadScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { isInEdit: props.navigation.state.params.isInEdit }
-    this.gamepad = props.navigation.state.params.gamepad;
+    this.state = {
+      isInEdit: props.navigation.state.params.isInEdit,
+      gamepad: props.navigation.state.params.gamepad
+    };
+    // this.gamepad = props.navigation.state.params.gamepad;
+  }
+
+  componentWillMount() {
+    this.props.navigation.dispatch(lockToLandscape());
   }
 
   switchToEdit = () => {
@@ -36,15 +44,20 @@ class GamepadScreen extends React.Component {
 
   renderEditor = () => {
     if (this.state.isInEdit) {
-      return (<GamepadEditor style={[styles.editor]} gamepad={this.gamepad} />);
+      return (<GamepadEditor style={[styles.editor]} gamepad={this.state.gamepad} onChange={this.onChange} />);
     } else {
-      return (<Gamepad style={[styles.editor]} gamepad={this.gamepad} />);
+      return (<Gamepad style={[styles.editor]} gamepad={this.state.gamepad} />);
     }
+  }
+
+  onChange = (gamepad) => {
+    this.setState(update(this.state, {
+      gamepad: { $set: gamepad }
+    }));
   }
 
   render() {
     return (
-
       <View style={styles.main}>
         {this.renderEditor()}
         <View style={[styles.buttons]}>
@@ -52,13 +65,12 @@ class GamepadScreen extends React.Component {
           <Icon containerStyle={{ backgroundColor: '#61b7ed' }} style={styles.icon} name='close' size={36} color='#d64455' onPress={() => this.goBack(false)} />
         </View>
       </View>
-
     )
   }
 
   goBack = (save) => {
     if (save) {
-      this.props.navigation.dispatch(saveGamepad(this.gamepad))
+      this.props.navigation.dispatch(saveGamepad(this.state.gamepad))
     }
     this.props.navigation.goBack();
     this.props.navigation.dispatch(unlockOrientation());

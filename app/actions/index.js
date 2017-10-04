@@ -4,7 +4,7 @@ import uuid from 'uuid/v4';
 //Domaine
 export const saveGamepad = (gamepad) => {
     return {
-        type: ADD_GAMEPAD,
+        type: SAVE_GAMEPAD,
         gamepad
     }
 }
@@ -32,11 +32,11 @@ export const initGamepad = () => ({
     controls: []
 })
 
-export const initControl = (type) => ({
+export const initControl = (type, window) => ({
     id: uuid(),
     type: type,
     position: { 
-        x: 150, 
-        y: 100 
+        x: window.width / 2, 
+        y: window.height / 2 
     }
 })

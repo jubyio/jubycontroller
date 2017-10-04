@@ -8,7 +8,7 @@ import { LOCK_LANDSCAPE, ADD_GAMEPAD } from '../constants';
 
 import GamepadList from './GamepadList';
 
-import { initGamepad, lockToLandscape } from '../actions';
+import { initGamepad } from '../actions';
 
 class GamepadsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -40,7 +40,6 @@ class GamepadsScreen extends React.Component {
 
   createNewGamepad = () => {
     this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isInEdit: true, gamepad: initGamepad()} }))
-    this.props.navigation.dispatch(lockToLandscape());
   }
 }
 
