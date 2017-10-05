@@ -51,9 +51,10 @@ class GamepadScreen extends React.Component {
   }
 
   onChange = (gamepad) => {
-    this.setState(update(this.state, {
+    var _state = update(this.state, {
       gamepad: { $set: gamepad }
-    }));
+    });
+    this.setState(_state);
   }
 
   render() {

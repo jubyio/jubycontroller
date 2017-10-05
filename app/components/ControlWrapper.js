@@ -6,7 +6,7 @@ class ControlWrapper extends React.Component {
     static propTypes = {
         onChange: PropTypes.func.isRequired,
         children: PropTypes.any.isRequired,
-        controlId: PropTypes.string.isRequired
+        control: PropTypes.object.isRequired
     }
 
     constructor(props) {
@@ -34,7 +34,7 @@ class ControlWrapper extends React.Component {
                 var middleY = window.height / 2;
                 var positionX = middleX + this.state._value.x;
                 var positionY = middleY + this.state._value.y;
-                this.props.onChange(this.props.controlId, positionX, positionY);
+                this.props.onChange(this.props.control.id, positionX, positionY);
             }
         });
     }
@@ -49,19 +49,9 @@ class ControlWrapper extends React.Component {
         this.state.pan.removeAllListeners();
     }
 
-    positionCss() {
-        let window = Dimensions.get('window');
-        return {
-            zIndex: 999,
-            position: 'absolute',
-            top: window.height / 2,
-            left: window.width / 2,
-        }
-    }
-
     render() {
         return (
-            <Animated.View style={this.positionCss()}
+            <Animated.View
                 {...this.panResponder.panHandlers}
                 style={[this.state.pan.getLayout()]} >
                 <View style={styles.main}>

@@ -39,7 +39,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
     renderWrapperControl = (control) => {
         if (this.props.isInEditMode) {
             return (
-                <ControlWrapper onChange={this.onChange} controlId={control.id}>
+                <ControlWrapper onChange={this.onChange} control={control}>
                     {this.renderControl(control)}
                 </ControlWrapper>
             )
@@ -48,23 +48,24 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         }
     }
 
-    onChange = (controlId, x, y) => {
+    onChange = (controlId, posX, posY) => {
         let index = this.state.gamepad.controls.findIndex(control => control.id === controlId);
-        this.setState(update(this.state, {
+        var _state = update(this.state, {
             gamepad: {
                 controls: {
-                    [index]: { position: { $set: { x: x, y: y } } }
+                    [index]: { $merge: { position: { x: posX, y: posY } } }
                 }
             }
-        }));
-        this.props.onChange(this.state.gamepad);
+        });
+        this.setState(_state);
+        this.props.onChange(_state);
     };
 
     render() {
         return (<View style={{ flex: 1 }}>
             {this.state.gamepad.controls.map((control) => {
                 return (
-                    <View key={control.id} style={[{ position: 'absolute' }]}>
+                    <View key={control.id} style={[{ position: 'absolute', top: control.position.y, left: control.position.x }]}>
                         {this.renderWrapperControl(control)}
                     </View>
                 )

@@ -22,10 +22,12 @@ class GamepadEditor extends React.Component {
 
     addControl = (type) => {
         let window = Dimensions.get('window');
-        this.setState(update(this.state, {
+        let _state = update(this.state, {
             isMenuOpen: { $set: false },
             gamepad: { controls: { $push: [initControl(type, window)] } }
-        }));
+        });
+        this.setState(_state);
+        this.props.onChange(_state.gamepad);
     }
 
     togglePadsMenu = () => {
@@ -48,10 +50,11 @@ class GamepadEditor extends React.Component {
     }
 
     onChange = (gamepad) => {
-        this.setState(update(this.state, {
-            gamepad: { $set: gamepad }
-        }));
-        this.props.onChange(this.state.gamepad);
+        let _state = update(this.state, {
+            gamepad: { $set: gamepad.gamepad }
+        });
+        this.setState(_state);
+        this.props.onChange(_state.gamepad);
     }
 
     render() {

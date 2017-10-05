@@ -7,20 +7,23 @@ const domain = (state = { gamepads: [] }, action) => {
     var index;
     switch (action.type) {
         case SAVE_GAMEPAD:
+            var _state = null;
             if (!action.gamepad.id) {
                 action.gamepad.id = uuid();
             }
             index = state.gamepads.findIndex(g => g.id == action.gamepad.id);
             if (index >= 0) {
-                return update(state, {
+                _state = update(state, {
                     gamepads: {
                         [index]: {
-                            $set: [action.gamepad]
+                            $set: action.gamepad
                         }
                     }
-                });
+                })
+                return _state;
             } else {
-                return update(state, { gamepads: { $push: [action.gamepad] } });
+                _state = update(state, { gamepads: { $push: [action.gamepad] } });
+                return _state;
             }
         case DELETE_GAMEPAD:
             index = state.gamepads.findIndex(g => g.id == action.id);
