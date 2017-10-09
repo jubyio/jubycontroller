@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 
 import GamepadEditor from './GamepadEditor';
 import Gamepad from './Gamepad';
+import GamepadEditButtons from './GamepadEditButtons';
 
 import { SAVE_GAMEPAD, CANCEL_GAMEPAD } from '../constants';
 import { saveGamepad, lockToLandscape, unlockOrientation } from '../actions';
@@ -21,7 +22,6 @@ class GamepadScreen extends React.Component {
       isInEdit: props.navigation.state.params.isInEdit,
       gamepad: props.navigation.state.params.gamepad
     };
-    // this.gamepad = props.navigation.state.params.gamepad;
   }
 
   componentWillMount() {
@@ -44,27 +44,18 @@ class GamepadScreen extends React.Component {
 
   renderEditor = () => {
     if (this.state.isInEdit) {
-      return (<GamepadEditor style={[styles.editor]} gamepad={this.state.gamepad} onChange={this.onChange} />);
+      return (<GamepadEditor style={[styles.editor]}  />);
     } else {
-      return (<Gamepad style={[styles.editor]} gamepad={this.state.gamepad} />);
+      return (<Gamepad style={[styles.editor]} />);
     }
   }
 
-  onChange = (gamepad) => {
-    var _state = update(this.state, {
-      gamepad: { $set: gamepad }
-    });
-    this.setState(_state);
-  }
 
   render() {
     return (
       <View style={styles.main}>
         {this.renderEditor()}
-        <View style={[styles.buttons]}>
-          {this.renderValidateEditButton()}
-          <Icon containerStyle={{ backgroundColor: '#61b7ed' }} style={styles.icon} name='close' size={36} color='#d64455' onPress={() => this.goBack(false)} />
-        </View>
+       <GamepadEditButtons navigation={this.props.navigation} switchToEdit={this.switchToEdit} isInEdit={this.state.isInEdit} />
       </View>
     )
   }

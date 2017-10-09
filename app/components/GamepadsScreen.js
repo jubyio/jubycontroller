@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Text, View, StatusBar, StyleSheet } from 'react-native';
 import { NavigationActions } from 'react-navigation';
@@ -8,7 +7,7 @@ import { LOCK_LANDSCAPE, ADD_GAMEPAD } from '../constants';
 
 import GamepadList from './GamepadList';
 
-import { initGamepad } from '../actions';
+import { initGamepad, editGamepad } from '../actions';
 
 class GamepadsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -39,7 +38,9 @@ class GamepadsScreen extends React.Component {
   }
 
   createNewGamepad = () => {
-    this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isInEdit: true, gamepad: initGamepad()} }))
+    const newGamepad = initGamepad();
+    this.props.navigation.dispatch(editGamepad(newGamepad));
+    this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isInEdit: true, gamepad: newGamepad} }))
   }
 }
 

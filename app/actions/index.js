@@ -1,5 +1,37 @@
-import { SAVE_GAMEPAD, DELETE_GAMEPAD, LOCK_LANDSCAPE, UNLOCK_ORIENTATION } from '../constants';
+import {
+    SAVE_GAMEPAD,
+    DELETE_GAMEPAD,
+    LOCK_LANDSCAPE,
+    NEW_GAMEPAD,
+    EDIT_GAMEPAD,
+    EDIT_CONTROL,
+    ADD_CONTROL,
+    UNLOCK_ORIENTATION
+} from '../constants';
 import uuid from 'uuid/v4';
+
+//Config
+export const editGamepad = (gamepad) => {
+    return {
+        type: EDIT_GAMEPAD,
+        gamepad
+    }
+}
+
+export const addControl = (control) => {
+    return {
+        type: ADD_CONTROL,
+        control
+    };
+}
+
+export const editControl = (control) => {
+    return {
+        type: EDIT_CONTROL,
+        control
+    };
+}
+
 
 //Domaine
 export const saveGamepad = (gamepad) => {
@@ -32,11 +64,14 @@ export const initGamepad = () => ({
     controls: []
 })
 
-export const initControl = (type, window) => ({
+export const initControl = (type , window) => ({
     id: uuid(),
     type: type,
-    position: { 
-        x: window.width / 2, 
-        y: window.height / 2 
-    }
+    position: {
+        x: window.width / 2,
+        y: window.height / 2
+    },
+    width: window.width / 5,
+    height: window.height / 5
+
 })

@@ -5,12 +5,17 @@ import { connect, } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { Header, List, ListItem, Icon } from 'react-native-elements';
 
-const GamepadList = ({ gamepads, navigation }) => (
+import { editGamepad } from '../actions';
+
+const GamepadList = ({ gamepads, navigation, editGamepad }) => (
     <List style={styles.list}>
         {
             gamepads.map((g, i) => (
                 <ListItem title={g.name} key={i}
-                    onPress={() => navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isEdit: false, gamepad: g } }))} />
+                    onPress={() => {
+                        editGamepad(g);
+                        navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isEdit: false, gamepad: g } }))}
+                    } />
             ))
         }
     </List>
@@ -25,12 +30,16 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => ({
-    gamepads: state.domain.gamepads
+    gamepads: state.domain.gamepads,
 });
+
+const mapDispatchToProps = dispatch => ({
+    editGamepad: (gamepad) => dispatch(editGamepad(gamepad))
+})
 
 GamepadList.propTypes = {
     gamepads: PropTypes.array.isRequired,
     navigation: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, {})(GamepadList)
+export default connect(mapStateToProps, mapDispatchToProps)(GamepadList)

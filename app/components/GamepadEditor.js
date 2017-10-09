@@ -9,7 +9,7 @@ import update from 'immutability-helper';
 import Stick from './Stick';
 import Gamepad from './Gamepad';
 import { ADD_CONTROL, ControlTypes } from '../constants';
-import { initControl } from '../actions';
+import { initControl, addControl, editControl } from '../actions';
 
 import { Button, Icon, SideMenu } from 'react-native-elements'
 
@@ -22,12 +22,11 @@ class GamepadEditor extends React.Component {
 
     addControl = (type) => {
         let window = Dimensions.get('window');
-        let _state = update(this.state, {
+        let newControl = initControl(type, window);
+        this.setState(update(this.state, {
             isMenuOpen: { $set: false },
-            gamepad: { controls: { $push: [initControl(type, window)] } }
-        });
-        this.setState(_state);
-        this.props.onChange(_state.gamepad);
+        }));
+        this.props.addControl(newControl);
     }
 
     togglePadsMenu = () => {
@@ -49,21 +48,12 @@ class GamepadEditor extends React.Component {
         return null;
     }
 
-    onChange = (gamepad) => {
-        let _state = update(this.state, {
-            gamepad: { $set: gamepad.gamepad }
-        });
-        this.setState(_state);
-        this.props.onChange(_state.gamepad);
-    }
-
     render() {
         return (
             <View style={[styles.buttons, { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: '#a8a4a7' }]}>
                 <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, alignItems: 'stretch' }}>
-                    <Gamepad style={{ flex: 1, backgroundColor: 'red' }} gamepad={this.state.gamepad} isInEditMode={true} onChange={this.onChange} />
+                    <Gamepad style={{ flex: 1 }} isInEditMode={true} />
                 </View>
-                {/* <Gamepad style={[styles.gamepad, { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: 'blue' }]} gamepad={this.state.gamepad}/> */}
                 <Icon raised style={styles.padButton} name='videogame-asset' size={30} onPress={this.togglePadsMenu}></Icon>
                 <Icon raised style={styles.padButton} name='settings' size={30}></Icon>
                 {this.renderPadsMenu()}
@@ -109,15 +99,16 @@ const styles = StyleSheet.create({
 })
 
 GamepadEditor.propTypes = {
-    gamepad: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired
+    gamepad: PropTypes.object.isRequired
 }
 
 
 const mapStateToProps = state => ({
+    gamepad: state.config.gamepad
 });
 
 const mapDispatchToProps = dispatch => ({
+    addControl: (control) => dispatch(addControl(control))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GamepadEditor)

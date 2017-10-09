@@ -1,23 +1,30 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View } from 'react-native';
+import { connect } from 'react-redux';
 
 import { Slider } from 'react-native-elements';
 
-const Stick = ({ stick }) => (
-    <View style={{width:50, height:20}}>
-        <Slider/>
+import { editControl } from '../actions';
+
+const Stick = ({ id, stick }) => (
+    <View style={{ width: stick.width, height: stick.height }}>
+        <Slider />
     </View>
 );
 
+Stick.propTypes = {
+    id: PropTypes.string.isRequired,
+}
 
-const mapStateToProps = (state) =>({
+const mapStateToProps = (state, ownProps) => ({
+    stick: state.config.gamepad.controls.find(c => c.id === ownProps.id)
 })
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-    valueChange: dispatch({type: ''})
+const mapDispatchToProps = (dispatch) => ({
 })
 
-export default Stick;
+export default connect(mapStateToProps, mapDispatchToProps)(Stick);
 
 /* model de stick
 {
