@@ -71,6 +71,7 @@ export const initControl = (type , window) => ({
         x: window.width / 2,
         y: window.height / 2
     },
+    scale: 1,
     width: window.width / 5,
     height: window.height / 5
 

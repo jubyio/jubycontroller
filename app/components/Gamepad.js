@@ -13,7 +13,6 @@ import { getTouches, getScale, isMultiTouch } from '../utils/events';
 import { distance } from '../utils/math';
 
 class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) => {
-
     constructor(props) {
         super(props);
         this.prevLeft = 0;
@@ -21,13 +20,8 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         this.minScale = 0.33;
         this.maxScale = 2;
         this.state = {
-            selected: null, 
-            selectedRef: null, 
-            styles: {
-                transform: [
-                    { scale: 1 }
-                ],
-            }
+            selected: null,
+            selectedRef: null
         };
     }
 
@@ -59,7 +53,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
                 style: {
                     borderStyle: 'dashed',
                     borderWidth: 2,
-                    borderColor: '#000000',
+                    borderColor: '#000000'
                 }
             })
             this.prevLeft = clickedControl.position.x;
@@ -83,18 +77,21 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
             return;
         }
         let refControl = this.refs[this.state.selected];
-        refControl.setNativeProps({
-            style: { left: this.prevLeft + gestureState.dx, top: this.prevTop + gestureState.dy }
-        });
-
         const newTouches = getTouches(event);
         if (newTouches.length !== initialTouches.length) {
             this.initialTouches = newTouches;
         } else {
-            this.onPinch(event);
+            if (isMultiTouch(event)) {
+                var style = this.onPinch(event, refControl);
+                refControl.setNativeProps({
+                    style: { transform: [{ scale: style }] }
+                });
+                console.log(`onMoveEnd: ${style}`);
+            }
         }
-
-        this.updateStyles();
+        refControl.setNativeProps({
+            style: { left: this.prevLeft + gestureState.dx, top: this.prevTop + gestureState.dy }
+        });
     }
 
     onMoveEnd = (event, gestureState) => {
@@ -102,6 +99,8 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
             return;
         }
         let refControl = this.refs[this.state.selected];
+        const { style } = refControl.props;
+        console.log(`onMoveEnd: ${style[0].transform[0].scale}`);
         let selectedControl = this.props.gamepad.controls.find(c => c.id == this.state.selected)
         this.props.editControl(update(selectedControl, {
             position: {
@@ -109,43 +108,47 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
                     x: selectedControl.position.x + gestureState.dx,
                     y: selectedControl.position.y + gestureState.dy
                 }
-            }
+            },
+            scale: { $set: style[0].transform[0].scale }
         }
         ));
         this.setState({ selected: null });
     }
 
-    onPinch = (event) => {
-        const { styles } = this.state;
-        if (isMultiTouch(event)) {
-            const currentDistance = distance(getTouches(event));
-            const initialDistance = distance(this.initialTouches);
-            const increasedDistance = currentDistance - initialDistance;
-            const diffDistance = this.prevDistance - increasedDistance;
-            this.pinchStyles = { transform: [] };
-            this.pinchStyles.transform.push({
-                scale: Math.min(Math.max(getScale(event, styles, diffDistance), this.minScale), this.maxScale),
-            });
-            this.prevDistance = increasedDistance;
-        }
-
+    onPinch = (event, refControl) => {
+        const { style } = refControl.props;
+        const currentDistance = distance(getTouches(event));
+        const initialDistance = distance(this.initialTouches);
+        const increasedDistance = initialDistance - currentDistance;
+        // const diffDistance = this.prevDistance - increasedDistance;
+        // this.pinchStyles = { transform: [] };
+        // this.pinchStyles.transform.push({
+        // scale: Math.min(Math.max(getScale(event, style, diffDistance), this.minScale), this.maxScale),
+        // });
+        this.prevDistance = increasedDistance;
+        const scale = Math.min(Math.max(getScale(event, style[0], increasedDistance), this.minScale), this.maxScale);
+        return scale;
+        //this.updateStyles(refControl);
     }
 
-    updateStyles = () => {
-        const styles = {
-            ...this.state.styles,
-            ...this.pinchStyles,
-        };
-        this.updateNativeStyles(styles);
-        this.setState({ styles });
-    }
+    // updateStyles = (refControl) => {
+    //     const { style } = refControl.props;
+    //     const styles = {
+    //         ...style[0],
+    //         ...this.pinchStyles,
+    //     };
+    //     this.updateNativeStyles(refControl, styles);
+    //     // this.setState({ styles });
+    // }
 
-    updateNativeStyles = (styles) => {
-        if (this.view) {
-            this.view.setNativeProps({ styles });
-        }
-    }
-
+    // updateNativeStyles = (refControl, styles) => {
+    //     if (refControl) {
+    //         console.log(`updateNativeStyles: ${styles.transform[0].scale}`);
+    //         refControl.setNativeProps({
+    //             style: { transform: [{ scale: styles.transform[0].scale }] }
+    //         });
+    //     }
+    // }
 
     renderControl = (control) => {
         if (control.type == ControlTypes.STICK) {
@@ -163,13 +166,11 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         return control;
     }
 
-
     render() {
-        const { styles } = this.state;
         return (<View style={{ flex: 1 }} {...this.panResponder.panHandlers}>
             {this.props.gamepad.controls.map((control) => {
                 return (
-                    <View ref={control.id} key={control.id} style={[styles, { position: 'absolute', top: control.position.y, left: control.position.x }]}>
+                    <View ref={control.id} key={control.id} style={[{ position: 'absolute', top: control.position.y, left: control.position.x, transform: [{ scale: control.scale }] }]}>
                         {this.renderControl(control)}
                     </View>
                 )
@@ -178,13 +179,6 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         </View>);
     };
 }
-//, top: control.position.y, left: control.position.x,
-
-const styles = StyleSheet.create({
-    control: {
-        position: 'absolute'
-    }
-});
 
 Gamepad.propTypes = {
     gamepad: PropTypes.object.isRequired,
