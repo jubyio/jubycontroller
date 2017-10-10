@@ -13,7 +13,6 @@ import { saveGamepad, lockToLandscape, unlockOrientation } from '../actions';
 class GamepadScreen extends React.Component {
   static navigationOptions = {
     title: 'Gamepad'
-
   };
 
   constructor(props) {
