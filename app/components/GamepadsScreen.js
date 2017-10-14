@@ -7,7 +7,7 @@ import { LOCK_LANDSCAPE, ADD_GAMEPAD } from '../constants';
 
 import GamepadList from './GamepadList';
 
-import { initGamepad, editGamepad } from '../actions';
+import { initGamepad, editGamepad, deleteGamepad } from '../actions';
 
 class GamepadsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -16,23 +16,57 @@ class GamepadsScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = { selectedGamepad: null };
+  }
+
+  onSelected = (gamepad) => {
+    this.setState({ selectedGamepad: gamepad });
+  }
+
+  cleanSelectedGamepad = () => {
+    this.setState({ selectedGamepad: null });
+  }
+
+  deleteGamepad = () => {
+    this.props.deleteGamepad(this.state.selectedGamepad);
+    this.setState({ selectedGamepad: null });
+  }
+
+  renderHeader = () => {
+    if (this.state.selectedGamepad) {
+      return (
+        <Header
+          backgroundColor="#5a83ce"
+          leftComponent={
+            <Icon style={styles.leftButton} name='arrow-back' size={30} color="#fff" onPress={this.cleanSelectedGamepad}></Icon>
+          }
+          centerComponent={{ text: this.state.selectedGamepad.name, style: { color: '#fff', fontSize: 18 } }}
+          rightComponent={
+            <Icon style={styles.rightButton} name='delete' size={30} color='#fff' onPress={this.deleteGamepad}></Icon>
+          } />
+      )
+    } else {
+      return (
+        <Header
+          backgroundColor="#5a83ce"
+          centerComponent={{ text: 'GAMEPADS', style: { color: '#fff', fontSize: 18 } }}
+          rightComponent={
+            <Icon style={styles.rightButton} name='add-circle-outline' size={30} color='#fff' onPress={this.createNewGamepad}></Icon>
+          }
+        />
+      )
+    }
   }
 
   render() {
     return (
       <View style={styles.main}>
-        <Header
-          backgroundColor="#5a83ce"
-          centerComponent={{ text: 'GAMEPADS', style: { color: '#fff', fontSize: 18 } }}
-          rightComponent={
-            <Icon style={styles.rightButton} name='add-circle-outline' size={30} color='#fff'
-              onPress={this.createNewGamepad}></Icon>
-          }
-        />
-        <GamepadList navigation={this.props.navigation} style={styles.list} />
+        {this.renderHeader()}
+        <GamepadList navigation={this.props.navigation} style={styles.list} onSelected={this.onSelected} />
       </View>
     );
   }
+
   componentDidMount() {
     StatusBar.setHidden(true);
   }
@@ -40,7 +74,7 @@ class GamepadsScreen extends React.Component {
   createNewGamepad = () => {
     const newGamepad = initGamepad();
     this.props.navigation.dispatch(editGamepad(newGamepad));
-    this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isInEdit: true, gamepad: newGamepad} }))
+    this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isInEdit: true, gamepad: newGamepad } }))
   }
 }
 
@@ -54,8 +88,13 @@ const styles = StyleSheet.create({
     paddingTop: 70
   },
   list: {
-    flex:1,
+    flex: 1,
     backgroundColor: 'yellow'
+  },
+  leftButton: {
+    alignSelf: 'flex-start',
+    padding: 0,
+    marginTop: 0,
   },
   rightButton: {
     alignSelf: 'flex-end',
@@ -68,7 +107,11 @@ const styles = StyleSheet.create({
   }
 });
 
-export default GamepadsScreen;
+const mapStateToProps = state => ({
+});
 
+const mapDispatchToProps = dispatch => ({
+  deleteGamepad: (gamepad) => dispatch(deleteGamepad(gamepad.id))
+})
 
-/*< */
+export default connect(mapStateToProps, mapDispatchToProps)(GamepadsScreen)

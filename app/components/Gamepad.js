@@ -7,7 +7,7 @@ import update from 'immutability-helper';
 import Stick from './Stick'
 import PadButton from './PadButton';
 import { ControlTypes } from '../constants';
-import { saveGamepad, editControl } from '../actions';
+import { editControl } from '../actions';
 
 import { getTouches, getScale, isMultiTouch } from '../utils/events';
 import { distance } from '../utils/math';
