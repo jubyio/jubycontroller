@@ -17,8 +17,8 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         super(props);
         this.prevLeft = 0;
         this.prevTop = 0;
-        this.minScale = 0.33;
-        this.maxScale = 2;
+        this.minScale = 0.75;
+        this.maxScale = 1.25;
         this.currentScale = 0;
         this.state = {
             selected: null,
@@ -47,7 +47,10 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         this.initialTouches = getTouches(event);
         let clickedControl = this.findTouchedControl(pageX, pageY);
 
-        if (clickedControl) {            
+        if (this.state.selectedRef && this.state.selected !== clickedControl.id) {
+            this.unSelected();
+        }
+        if (clickedControl) {
             let refControl = this.refs[clickedControl.id];
             const { style } = refControl.props;
             this.setState({ selected: clickedControl.id, selectedRef: refControl });
@@ -62,14 +65,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
             this.prevLeft = clickedControl.position.x;
             this.prevTop = clickedControl.position.y;
         } else {
-            if (this.state.selectedRef) {
-                this.state.selectedRef.setNativeProps({
-                    style: {
-                        borderWidth: 0
-                    }
-                })
-            }
-            this.setState({ selected: null, selectedRef: null });
+            this.unSelected();
         }
     }
 
@@ -123,6 +119,17 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         }
         ));
         this.setState({ selected: null });
+    }
+
+    unSelected = () => {
+        if (this.state.selectedRef) {
+            this.state.selectedRef.setNativeProps({
+                style: {
+                    borderWidth: 0
+                }
+            })
+        }
+        this.setState({ selected: null, selectedRef: null });
     }
 
     renderControl = (control) => {
