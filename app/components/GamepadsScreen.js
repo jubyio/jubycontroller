@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Text, View, StatusBar, StyleSheet } from 'react-native';
+import { Text, View, StatusBar, StyleSheet, Modal, TouchableHighlight, TextInput } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { Header, List, ListItem, Icon } from 'react-native-elements';
 import { LOCK_LANDSCAPE, ADD_GAMEPAD } from '../constants';
+import update from 'immutability-helper';
 
 import GamepadList from './GamepadList';
 
@@ -16,7 +17,11 @@ class GamepadsScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { selectedGamepad: null };
+    this.state = {
+      selectedGamepad: null,
+      modalVisible: false,
+      text: 'test'
+    };
   }
 
   onSelected = (gamepad) => {
@@ -32,6 +37,12 @@ class GamepadsScreen extends React.Component {
     this.setState({ selectedGamepad: null });
   }
 
+  setModalVisible = (visibility) => {
+    this.setState(update(this.state, {
+      modalVisible: { $set: visibility },
+    }));
+  }
+
   renderHeader = () => {
     if (this.state.selectedGamepad) {
       return (
@@ -42,7 +53,10 @@ class GamepadsScreen extends React.Component {
           }
           centerComponent={{ text: this.state.selectedGamepad.name, style: { color: '#fff', fontSize: 18 } }}
           rightComponent={
-            <Icon style={styles.rightButton} name='delete' size={30} color='#fff' onPress={this.deleteGamepad}></Icon>
+            <View style={styles.edit}>
+              <Icon style={styles.rightButton} name='create' size={30} color='#fff' onPress={() => this.setModalVisible(!this.state.modalVisible)}></Icon>
+              <Icon style={styles.rightButton} name='delete' size={30} color='#fff' onPress={this.deleteGamepad}></Icon>
+            </View>
           } />
       )
     } else {
@@ -58,11 +72,54 @@ class GamepadsScreen extends React.Component {
     }
   }
 
+  renderEditModal = () => {
+    const { selectedGamepad, modalVisible } = this.state;
+    if (selectedGamepad) {
+      var nameGamepad = selectedGamepad.name;
+      return (
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={modalVisible}
+          onRequestClose={() => {  }}
+        >
+          <View style={styles.modal}>
+            <Text>Modifier le nom du gamepad</Text>
+            <TextInput
+              style={{ height: 40 }}
+              onChangeText={(text) => {
+                this.setState({text});
+              }}
+              value={selectedGamepad.name}
+            />
+            <View style={styles.actions}>
+              <TouchableHighlight onPress={() => {
+                this.setModalVisible(!modalVisible);
+                this.setState(update(this.state, {
+                  selectedGamepad: { name: { $set: this.state.text } }
+                }))
+                this.editGamepad(selectedGamepad);
+              }}>
+                <Text>Valider</Text>
+              </TouchableHighlight>
+              <TouchableHighlight onPress={() => {
+                this.setModalVisible(!modalVisible);
+              }}>
+                <Text>Annuler</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
+      );
+    }
+  }
+
   render() {
     return (
       <View style={styles.main}>
         {this.renderHeader()}
         <GamepadList navigation={this.props.navigation} style={styles.list} onSelected={this.onSelected} />
+        {this.renderEditModal()}
       </View>
     );
   }
@@ -78,8 +135,6 @@ class GamepadsScreen extends React.Component {
   }
 }
 
-
-
 const styles = StyleSheet.create({
   main: {
     flex: 1,
@@ -90,6 +145,10 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
     backgroundColor: 'yellow'
+  },
+  edit: {
+    flex: 1,
+    flexDirection: 'row'
   },
   leftButton: {
     alignSelf: 'flex-start',
@@ -104,6 +163,19 @@ const styles = StyleSheet.create({
   header: {
     bottom: 0,
     paddingRight: 0
+  },
+  modal: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'stretch',
+    width: '50%'
+  },
+  actions: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
 });
 
