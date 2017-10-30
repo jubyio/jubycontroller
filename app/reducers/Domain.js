@@ -27,7 +27,7 @@ const domain = (state = { gamepads: [] }, action) => {
             }
         case DELETE_GAMEPAD:
             index = state.gamepads.findIndex(g => g.id == action.id);
-            return update(state, { $splice: [[index, 1]] });
+            return update(state, { gamepads: { $splice: [[index, 1]] } });
         case REHYDRATE:
             var incoming = action.payload.domain
             if (incoming) return { ...state, ...incoming }

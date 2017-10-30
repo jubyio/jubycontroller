@@ -1,26 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
-import { connect, } from 'react-redux';
+import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
-import { Header, List, ListItem, Icon } from 'react-native-elements';
+import { List, ListItem } from 'react-native-elements';
 
 import { editGamepad } from '../actions';
 
-const GamepadList = ({ gamepads, navigation, editGamepad }) => (
+const GamepadList = ({ gamepads, navigation, editGamepad, onSelected }) => (
     <List style={styles.list}>
         {
-            gamepads.map((g, i) => (
-                <ListItem title={g.name} key={i}
+            gamepads.map((gamepad, i) => (
+                <ListItem title={gamepad.name} key={i}
+                    onLongPress={() => {
+                        onSelected(gamepad);
+                    }}
                     onPress={() => {
-                        editGamepad(g);
-                        navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isEdit: false, gamepad: g } }))}
-                    } />
+                        editGamepad(gamepad);
+                        navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isEdit: false, gamepad: gamepad } }))
+                    }}
+                />
             ))
         }
     </List>
 )
-
 
 const styles = StyleSheet.create({
     list: {

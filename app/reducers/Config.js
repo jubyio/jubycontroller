@@ -10,7 +10,7 @@ const config = (state = {}, action) => {
             return newState;
         case EDIT_CONTROL:
             const index = state.gamepad.controls.findIndex(control => control.id === action.control.id);
-            console.log(`position du control dans le reducer: id=${action.control.id} x=${action.control.position.x} y=${action.control.position.y}`);
+            console.log(`position du control dans le reducer: id=${action.control.id} x=${action.control.position.x} y=${action.control.position.y} scale=${action.control.scale}`);
             let toto = update(state, {
                 gamepad: {
                     controls: {
