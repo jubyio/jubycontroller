@@ -6,7 +6,9 @@ import {
     EDIT_GAMEPAD,
     EDIT_CONTROL,
     ADD_CONTROL,
-    UNLOCK_ORIENTATION
+    UNLOCK_ORIENTATION,
+    STICK_VALUE_CHANGED,
+    BUTTON_PRESSED
 } from '../constants';
 import uuid from 'uuid/v4';
 
@@ -55,6 +57,21 @@ export const lockToLandscape = () => (
 
 export const unlockOrientation = () => (
     { type: UNLOCK_ORIENTATION }
+)
+
+//Runtime
+export const moveStick = (stick) => (
+    {
+        type: STICK_VALUE_CHANGED,
+        stick
+    }
+)
+
+export const actionButton = (button) => (
+    {
+        type: STICK_VALUE_CHANGED,
+        button
+    }
 )
 
 //Helpers
