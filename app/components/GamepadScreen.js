@@ -37,7 +37,7 @@ class GamepadScreen extends React.Component {
         name='check' size={36} color='#66b23e' onPress={() => this.goBack(true)} />
     } else {
       return <Icon containerStyle={{ backgroundColor: '#61b7ed' }} style={styles.icon}
-        name='setting' size={36} color='#61b7ed' onPress={this.switchToEdit} />
+        name='settings' size={36} color='#61b7ed' onPress={this.switchToEdit} />
     }
   }
 

@@ -8,7 +8,8 @@ import {
     ADD_CONTROL,
     UNLOCK_ORIENTATION,
     STICK_VALUE_CHANGED,
-    BUTTON_PRESSED
+    BUTTON_PRESSED,
+    ControlTypes
 } from '../constants';
 import uuid from 'uuid/v4';
 
@@ -89,7 +90,7 @@ export const initControl = (type , window) => ({
         y: window.height / 2
     },
     scale: 1,
-    width: window.width / 5,
-    height: window.height / 5
+    width: type == ControlTypes.STICK ? window.width / 5 : 50,
+    height: type == ControlTypes.STICK ? window.height / 10 : 50
 
 })

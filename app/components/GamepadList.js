@@ -17,7 +17,7 @@ const GamepadList = ({ gamepads, navigation, editGamepad, onSelected }) => (
                     }}
                     onPress={() => {
                         editGamepad(gamepad);
-                        navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isEdit: false, gamepad: gamepad } }))
+                        navigation.dispatch(NavigationActions.navigate({ routeName: 'Gamepad', params: { isInEdit: false, gamepad: gamepad } }))
                     }}
                 />
             ))
