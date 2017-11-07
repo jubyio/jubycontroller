@@ -42,8 +42,8 @@ class GamepadEditor extends React.Component {
             return (
                 <View style={styles.sideMenu}>
                     <View style={styles.controls}>
-                        <Icon name='tune' onPress={() => this.addControl(ControlTypes.STICK)} size={35} />
-                        <Icon name='radio-button-unchecked' onPress={() => this.addControl(ControlTypes.BUTTON)} size={35} />
+                        <Icon style={styles.item} name='tune' onPress={() => this.addControl(ControlTypes.STICK)} size={35} />
+                        <Icon style={styles.item} name='radio-button-checked' onPress={() => this.addControl(ControlTypes.BUTTON)} size={35} />
                     </View>
                     <View style={styles.overlay}>
                         <TouchableWithoutFeedback onPress={this.togglePadsMenu}>
@@ -101,8 +101,14 @@ const styles = StyleSheet.create({
         right: 0,
         width: 200,
         backgroundColor: 'white',
-        padding: 5,
-        zIndex: 5
+        padding: 10,
+        zIndex: 5,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    item: {
+        height: 50
     },
     gamepad: {
         flex: 1,
