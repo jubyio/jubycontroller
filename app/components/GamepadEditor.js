@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 
-import { View, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
+import { View, StyleSheet, TouchableHighlight, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
 
@@ -40,9 +40,16 @@ class GamepadEditor extends React.Component {
     renderPadsMenu = () => {
         if (this.state.isMenuOpen) {
             return (
-                <View style={styles.menu}>
-                    <Icon name='tune' onPress={() => this.addControl(ControlTypes.STICK)} size={35} />
-                    <Icon name='radio-button-unchecked' onPress={() => this.addControl(ControlTypes.BUTTON)} size={35} />
+                <View style={styles.sideMenu}>
+                    <View style={styles.controls}>
+                        <Icon name='tune' onPress={() => this.addControl(ControlTypes.STICK)} size={35} />
+                        <Icon name='radio-button-unchecked' onPress={() => this.addControl(ControlTypes.BUTTON)} size={35} />
+                    </View>
+                    <View style={styles.overlay}>
+                        <TouchableWithoutFeedback onPress={this.togglePadsMenu}>
+                            <View style={{ flex: 1 }} />
+                        </TouchableWithoutFeedback>
+                    </View>
                 </View>)
         }
         return null;
@@ -78,14 +85,24 @@ const styles = StyleSheet.create({
         paddingHorizontal: 3,
         justifyContent: 'center'
     },
-    menu: {
-        position: 'absolute',
-        top: 40,
+    sideMenu: {
+        flex: 1,
+        left: 0,
+        top: 0,
+        bottom: 0,
         right: 0,
-        height: 100,
-        width: 100,
+        position: 'absolute'
+    },
+    controls: {
+        flex: 1,
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        width: 200,
         backgroundColor: 'white',
-        padding: 5
+        padding: 5,
+        zIndex: 5
     },
     gamepad: {
         flex: 1,
@@ -95,6 +112,15 @@ const styles = StyleSheet.create({
         height: 200,
         width: 200,
         backgroundColor: 'purple'
+    },
+    overlay: {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        position: 'absolute',
+        backgroundColor: 'gray',
+        opacity: 0.75
     }
 })
 
