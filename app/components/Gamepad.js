@@ -60,7 +60,9 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
                     borderWidth: 2,
                     borderColor: '#000000'
                 }
-            })
+            });
+            this.props.onSelect(clickedControl);
+
             this.currentScale = style[0].transform[0].scale;
             this.prevLeft = clickedControl.position.x;
             this.prevTop = clickedControl.position.y;
@@ -130,6 +132,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
             })
         }
         this.setState({ selected: null, selectedRef: null });
+        this.props.onSelect(null);
     }
 
     renderControl = (control) => {
@@ -163,7 +166,8 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
 
 Gamepad.propTypes = {
     gamepad: PropTypes.object.isRequired,
-    isInEditMode: PropTypes.bool
+    isInEditMode: PropTypes.bool,
+    onSelect: PropTypes.func
 }
 
 const mapStateToProps = (state) => ({
