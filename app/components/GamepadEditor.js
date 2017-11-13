@@ -24,10 +24,11 @@ import { ADD_CONTROL, ControlTypes } from '../constants';
 import { initControl, addControl, editControl } from '../actions';
 
 import { Button, Icon, SideMenu } from 'react-native-elements'
-import { ColorPicker } from 'react-native-color-picker'
+import { ColorPicker, toHsv, fromHsv } from 'react-native-color-picker'
 
 class GamepadEditor extends React.Component {
     control = null;
+    colorProperty = null;
 
     constructor(props) {
         super(props);
@@ -84,8 +85,8 @@ class GamepadEditor extends React.Component {
     renderSetting = () => {
         var keepValue = false;
         const options = [];
-        options.push({ value: 'h', label: 'Horizontal' });
-        options.push({ value: 'v', label: 'Vertical' });
+        options.push({ value: 'H', label: 'Horizontal' });
+        options.push({ value: 'V', label: 'Vertical' });
         if (this.state.isSettingOpen) {
             return (
                 <View style={styles.sideMenu}>
@@ -93,46 +94,48 @@ class GamepadEditor extends React.Component {
                         <ScrollView>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Nom</Text>
-                                <TextInput style={styles.input} placeholder='Nom' autoCapitalize='none' autoCorrect={false} ref={input => this.label = input} />
+                                <TextInput style={styles.input} placeholder='Nom' autoCapitalize='none' autoCorrect={false} ref={input => this.control.name = input} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur minimun</Text>
-                                <TextInput style={styles.input} placeholder='Valeur minimun' ref={input => this.minValue = input} keyboardType="numeric" />
+                                <TextInput style={styles.input} placeholder='Valeur minimun' ref={input => this.control.minValue = input} keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur maximun</Text>
-                                <TextInput style={styles.input} placeholder='Valeur maximun' ref={input => this.maxValue = input} keyboardType="numeric" />
+                                <TextInput style={styles.input} placeholder='Valeur maximun' ref={input => this.control.maxValue = input} keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} placeholder='Valeur par défault' ref={input => this.defaultValue = input} keyboardType="numeric" />
+                                <TextInput style={styles.input} placeholder='Valeur par défault' ref={input => this.control.defaultValue = input} keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
-                                <Switch style={styles.input} value={true} onValueChange={(val) => { console.log('change') }} />
+                                <Switch style={styles.input} value={this.control.keepValue} onValueChange={(val) => { this.control.keepValue = val }} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Orientation</Text>
-                                <Picker style={styles.input} mode='dropdown' onValueChange={(itemValue, itemIndex) => console.log(itemValue, itemIndex)}>
+                                <Picker style={styles.input} mode='dropdown' selectedValue={this.control.orientation} onValueChange={(itemValue, itemIndex) => this.control.orientation = `${itemValue}`}>
                                     {options.map((item, index) => {
-                                        return (< Picker.Item label={item.label} value={item.value} key={item.value } />);
+                                        return (< Picker.Item label={item.label} value={item.value} key={item.value} />);
                                     })}
                                 </Picker>
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Couleur active</Text>
                                 <TouchableHighlight style={styles.input} onPress={() => {
+                                    this.colorProperty = 'activeColor';
                                     this.setModalVisible(true)
                                 }}>
-                                    <Text>Choisir une couleur</Text>
+                                    {this.control && this.control.activeColor ? <Text>{this.control.activeColor}</Text> : <Text>Choisir une couleur</Text>}
                                 </TouchableHighlight>
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Couleur inactive</Text>
                                 <TouchableHighlight style={styles.input} onPress={() => {
+                                    this.colorProperty = 'inactiveColor';
                                     this.setModalVisible(true)
                                 }}>
-                                    <Text >Choisir une couleur</Text>
+                                    {this.control && this.control.inactiveColor ? <Text>{this.control.inactiveColor}</Text> : <Text>Choisir une couleur</Text>}
                                 </TouchableHighlight>
                             </View>
                             {this.renderModelaColorPicker()}
@@ -153,15 +156,29 @@ class GamepadEditor extends React.Component {
         this.setState({ modalVisible: visible });
     }
 
-
     renderModelaColorPicker = () => {
+        var color = null;
         return (
-            <Modal animationType="slide" transparent={false} visible={this.state.modalVisible} onRequestClose={() => { alert("Modal has been closed.") }} >
-                <View style={{flex: 1, padding: 15 }}>
-                    <ColorPicker style={{flex: 1}} onColorSelected={color => this.setModalVisible(!this.state.modalVisible) } />
-                    <TouchableHighlight onPress={() => { this.setModalVisible(!this.state.modalVisible); }}>
-                        <Text>Valider</Text>
-                    </TouchableHighlight>
+            <Modal animationType='slide' transparent={false} visible={this.state.modalVisible} onRequestClose={() => { alert('Modal has been closed.') }} >
+                <View style={{ flex: 1, padding: 20 }}>
+                    <Text>
+                        Couleur {this.colorProperty}
+                    </Text>
+                    <ColorPicker style={{ flex: 1 }} color={this.control[this.colorProperty] ? toHsv(this.control[this.colorProperty]) : toHsv('red')}
+                        onColorSelected={c => { color = c; }} hideSliders={true}/>
+                    <View >
+                        <TouchableHighlight onPress={() => {
+                            this.control[this.colorProperty] = fromHsv(color);
+                            this.setModalVisible(!this.state.modalVisible);
+                        }}>
+                            <Text>Valider</Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight onPress={() => {
+                            this.setModalVisible(!this.state.modalVisible);
+                        }}>
+                            <Text>Annuler</Text>
+                        </TouchableHighlight>
+                    </View>
                 </View>
             </Modal>
         );
