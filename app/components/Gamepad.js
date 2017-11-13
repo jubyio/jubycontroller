@@ -47,7 +47,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         this.initialTouches = getTouches(event);
         let clickedControl = this.findTouchedControl(pageX, pageY);
 
-        if (this.state.selectedRef && this.state.selected !== clickedControl.id) {
+        if (clickedControl && this.state.selectedRef && this.state.selected !== clickedControl.id) {
             this.unSelected();
         }
         if (clickedControl) {
