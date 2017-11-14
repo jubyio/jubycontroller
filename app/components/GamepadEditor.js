@@ -166,7 +166,7 @@ class GamepadEditor extends React.Component {
                                 }} />
                             </View>
                             <View style={styles.formGroup}>
-                                <Text style={styles.label}>Orientation</Text>
+                                <Text style={styles.label}>Horizontal</Text>
                                 <Switch style={styles.input} value={this.state.control.orientation == 'H' ? true : false} onValueChange={(val) => {
                                     this.saveControl('orientation', val ? 'H' : 'V');
                                 }} />

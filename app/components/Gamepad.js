@@ -155,7 +155,12 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         return (<View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: '#a8a4a7' }} {...this.panResponder.panHandlers}>
             {this.props.gamepad.controls.map((control) => {
                 return (
-                    <View ref={control.id} key={control.id} style={[{ position: 'absolute', top: control.position.y, left: control.position.x, transform: [{ scale: control.scale }] }]}>
+                    <View ref={control.id} key={control.id} style={[{
+                        position: 'absolute',
+                        top: control.position.y,
+                        left: control.position.x,
+                        transform: [{ scale: control.scale == null ? 1 : control.scale }, { rotate: control.orientation == 'H' ? '0deg' : '90deg' }]
+                    }]}>
                         {this.renderControl(control)}
                     </View>
                 )

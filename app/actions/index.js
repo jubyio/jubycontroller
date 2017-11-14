@@ -92,7 +92,7 @@ export const initControl = (type , window) => ({
     minValue: null,
     maxValue: null,
     defaultValue: null,
-    orientation: 'V',
+    orientation: 'H',
     position: {
         x: window.width / 2,
         y: window.height / 2
