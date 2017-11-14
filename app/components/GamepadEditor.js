@@ -165,12 +165,20 @@ class GamepadEditor extends React.Component {
                                     this.saveControl('keepValue', val);
                                 }} />
                             </View>
-                            <View style={styles.formGroup}>
-                                <Text style={styles.label}>Horizontal</Text>
-                                <Switch style={styles.input} value={this.state.control.orientation == 'H' ? true : false} onValueChange={(val) => {
-                                    this.saveControl('orientation', val ? 'H' : 'V');
-                                }} />
-                            </View>
+                            {
+                                (() => {
+                                    if (this.state.control.type === ControlTypes.STICK) {
+                                        return (
+                                            <View style={styles.formGroup}>
+                                                <Text style={styles.label}>Horizontal</Text>
+                                                <Switch style={styles.input} value={this.state.control.orientation == 'H' ? true : false} onValueChange={(val) => {
+                                                    this.saveControl('orientation', val ? 'H' : 'V');
+                                                }} />
+                                            </View>
+                                        );
+                                    }
+                                })()
+                            }
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Couleur active</Text>
                                 <TouchableHighlight style={styles.input} onPress={() => {
