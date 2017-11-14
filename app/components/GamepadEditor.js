@@ -101,26 +101,23 @@ class GamepadEditor extends React.Component {
                         <ScrollView>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Nom</Text>
-                                <TextInput style={styles.input} onEndEditing={(event) => {
-                                    this.control.name = event.nativeEvent.text; this.saveControl();
-                                }}
-                                placeholder='Nom' autoCapitalize='none' autoCorrect={false} />
+                                <TextInput style={styles.input} onEndEditing={(event) => { this.control.name = event.nativeEvent.text; this.saveControl(); }} placeholder='Nom' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur minimun</Text>
-                                <TextInput style={styles.input} onEndEditing={(text) => { this.control.minValue = text; this.saveControl(); }} placeholder='Valeur minimun' keyboardType="numeric" />
+                                <TextInput style={styles.input} onEndEditing={(event) => { this.control.minValue = event.nativeEvent.text; this.saveControl(); }} placeholder='Valeur minimun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur maximun</Text>
-                                <TextInput style={styles.input} onEndEditing={(text) => this.saveControl()} placeholder='Valeur maximun' ref={input => this.control.maxValue = input} keyboardType="numeric" />
+                                <TextInput style={styles.input} onEndEditing={(event) => { this.control.maxValue = event.nativeEvent.text; this.saveControl(); }} placeholder='Valeur maximun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} onEndEditing={(text) => this.saveControl()} placeholder='Valeur par défault' ref={input => this.control.defaultValue = input} keyboardType="numeric" />
+                                <TextInput style={styles.input} onEndEditing={(event) => { this.control.defaultValue = event.nativeEvent.text; this.saveControl(); }} placeholder='Valeur par défault' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
-                                <Switch style={styles.input} value={this.control && this.control.keepValue ? this.control.keepValue : false} onValueChange={(val) => { this.control.keepValue = val }} />
+                                <Switch style={styles.input} value={this.control && this.control.keepValue ? this.control.keepValue : false} onValueChange={(val) => { this.control.keepValue = val; this.saveControl(); }} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Orientation</Text>
