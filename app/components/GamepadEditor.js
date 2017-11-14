@@ -23,8 +23,8 @@ import Gamepad from './Gamepad';
 import { ADD_CONTROL, ControlTypes } from '../constants';
 import { initControl, addControl, editControl } from '../actions';
 
-import { Button, Icon, SideMenu } from 'react-native-elements'
-import { ColorPicker, TriangleColorPicker, toHsv, fromHsv } from 'react-native-color-picker'
+import { Button, Icon, SideMenu } from 'react-native-elements';
+import { ColorWheel } from 'react-native-color-wheel';
 
 class GamepadEditor extends React.Component {
     control = null;
@@ -32,7 +32,7 @@ class GamepadEditor extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { modalVisible: false, isMenuOpen: false, gamepad: props.gamepad, colorControl: 'red' };
+        this.state = { modalVisible: false, isMenuOpen: false, gamepad: props.gamepad, colorControl: '#ee0000' };
     }
 
     addControl = (type) => {
@@ -101,19 +101,22 @@ class GamepadEditor extends React.Component {
                         <ScrollView>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Nom</Text>
-                                <TextInput style={styles.input} placeholder='Nom' autoCapitalize='none' autoCorrect={false} ref={input => this.control.name = input} />
+                                <TextInput style={styles.input} onEndEditing={(event) => {
+                                    this.control.name = event.nativeEvent.text; this.saveControl();
+                                }}
+                                placeholder='Nom' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur minimun</Text>
-                                <TextInput style={styles.input} placeholder='Valeur minimun' ref={input => this.control.minValue = input} keyboardType="numeric" />
+                                <TextInput style={styles.input} onEndEditing={(text) => { this.control.minValue = text; this.saveControl(); }} placeholder='Valeur minimun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur maximun</Text>
-                                <TextInput style={styles.input} placeholder='Valeur maximun' ref={input => this.control.maxValue = input} keyboardType="numeric" />
+                                <TextInput style={styles.input} onEndEditing={(text) => this.saveControl()} placeholder='Valeur maximun' ref={input => this.control.maxValue = input} keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} placeholder='Valeur par défault' ref={input => this.control.defaultValue = input} keyboardType="numeric" />
+                                <TextInput style={styles.input} onEndEditing={(text) => this.saveControl()} placeholder='Valeur par défault' ref={input => this.control.defaultValue = input} keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
@@ -132,7 +135,7 @@ class GamepadEditor extends React.Component {
                                 <TouchableHighlight style={styles.input} onPress={() => {
                                     this.colorProperty = 'activeColor';
                                     this.setState(update(this.state, {
-                                        colorControl: { $set: this.control.activeColor ? toHsv(this.control.activeColor) : 'red' }
+                                        colorControl: { $set: this.control.inactiveColor ? this.control.inactiveColor : '#ee0000' }
                                     }));
                                     this.setModalVisible(true)
                                 }}>
@@ -144,7 +147,7 @@ class GamepadEditor extends React.Component {
                                 <TouchableHighlight style={styles.input} onPress={() => {
                                     this.colorProperty = 'inactiveColor';
                                     this.setState(update(this.state, {
-                                        colorControl: { $set: this.control.inactiveColor ? toHsv(this.control.inactiveColor) : 'red' }
+                                        colorControl: { $set: this.control.inactiveColor ? this.control.inactiveColor : '#ee0000' }
                                     }));
                                     this.setModalVisible(true)
                                 }}>
@@ -178,32 +181,41 @@ class GamepadEditor extends React.Component {
         console.log(`state.colorControl : ${this.state.colorControl}`);
     }
 
+    saveControl = () => {
+        this.props.editControl(this.control);
+    }
+
     renderModelaColorPicker = () => {
         if (this.state.colorControl) {
-            console.log(`colorProperty: ${this.control[this.colorProperty]} colorControl: ${fromHsv(this.state.colorControl)}`);
+            console.log(`colorProperty: ${this.control[this.colorProperty]} colorControl: ${this.state.colorControl}`);
             return (
                 <Modal animationType='slide' transparent={false} visible={this.state.modalVisible} onRequestClose={() => { alert('Modal has been closed.') }} >
                     <View style={{ flex: 1, flexDirection: 'column', padding: 20 }}>
                         <Text style={{ color: 'black', fontWeight: 'bold' }}>
                             Couleur {this.colorProperty == 'activeColor' ? 'active' : 'inactive'}
                         </Text>
-                        <ColorPicker style={{ flex: 1 }} color={this.state.colorControl} hideSliders={true} onColorChange={this.onColorChange} />
+                        <View style={{ flex: 1 }}>
+                            <ColorWheel initialColor={this.state.colorControl} onColorChange={this.onColorChange}
+                                style={{ width: Dimensions.get('window').width }}
+                                thumbStyle={{ height: 30, width: 30, borderRadius: 30 }} />
+                        </View>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                             <TouchableHighlight onPress={() => {
-                                this.control[this.colorProperty] = fromHsv(this.state.colorControl);
-                                // this.setState(update(this.state, {
-                                //     $unset: ['colorControl']
-                                // }));
-                                // console.log(`state.colorControl : ${this.state.colorControl}`);                                
+                                this.control[this.colorProperty] = this.state.colorControl;
+                                this.setState(update(this.state, {
+                                    $unset: ['colorControl']
+                                }));
+                                console.log(`state.colorControl : ${this.state.colorControl}`);
                                 this.setModalVisible(!this.state.modalVisible);
+                                this.saveControl();
                             }}>
                                 <Text style={{ color: 'black' }}>Valider</Text>
                             </TouchableHighlight>
                             <TouchableHighlight onPress={() => {
-                                // this.setState(update(this.state, {
-                                //     $unset: ['colorControl']
-                                // }));
-                                // console.log(`state.colorControl : ${this.state.colorControl}`);
+                                this.setState(update(this.state, {
+                                    $unset: ['colorControl']
+                                }));
+                                console.log(`state.colorControl : ${this.state.colorControl}`);
                                 this.setModalVisible(!this.state.modalVisible);
                             }}>
                                 <Text style={{ color: 'black', marginLeft: 5 }}>Annuler</Text>
@@ -320,7 +332,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    addControl: (control) => dispatch(addControl(control))
+    addControl: (control) => dispatch(addControl(control)),
+    editControl: (control) => dispatch(editControl(control))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GamepadEditor)

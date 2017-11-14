@@ -81,24 +81,19 @@ class GamepadsScreen extends React.Component {
           animationType="slide"
           transparent={false}
           visible={modalVisible}
-          onRequestClose={() => {  }}
+          onRequestClose={() => { }}
         >
           <View style={styles.modal}>
             <Text>Modifier le nom du gamepad</Text>
-            <TextInput
-              style={{ height: 40 }}
-              onChangeText={(text) => {
-                this.setState({text});
-              }}
-              value={selectedGamepad.name}
-            />
+            {/* <TextInput style={{ height: 40 }} value={selectedGamepad.namer} placeholder='Nom' autoCapitalize='none' autoCorrect={false} ref={input =>selectedGamepad.name = input} /> */}
+            <TextInput style={{ height: 40 }} placeholder='Nom' autoCapitalize='none' autoCorrect={false} ref={input => selectedGamepad.name = input} />
             <View style={styles.actions}>
               <TouchableHighlight onPress={() => {
                 this.setModalVisible(!modalVisible);
                 this.setState(update(this.state, {
                   selectedGamepad: { name: { $set: this.state.text } }
                 }))
-                this.editGamepad(selectedGamepad);
+                editGamepad(selectedGamepad);
               }}>
                 <Text>Valider</Text>
               </TouchableHighlight>
