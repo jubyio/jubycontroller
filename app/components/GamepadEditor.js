@@ -26,7 +26,6 @@ import { initControl, addControl, editControl } from '../actions';
 
 import { Button, Icon, SideMenu } from 'react-native-elements';
 import { ColorWheel } from 'react-native-color-wheel';
-// import ModalSelector from 'react-native-modal-selector';
 
 class GamepadEditor extends React.Component {
     colorProperty = null;
@@ -90,6 +89,38 @@ class GamepadEditor extends React.Component {
         this.props.editControl(state.control);
     }
 
+    onColorChange = (color) => {
+        this.setState(update(this.state, {
+            colorControl: { $set: color }
+        }));
+    }
+
+    setModalVisible = (visible) => {
+        this.setState(update(this.state, {
+            modalVisible: { $set: visible }
+        }));
+    }
+
+    pressColor = (colorProperty) => {
+        this.setState(update(this.state, {
+            colorControl: { $set: this.state.control[colorProperty] ? this.state.control[colorProperty] : '#ee0000' },
+            colorProperty: { $set: colorProperty },
+            modalVisible: { $set: true }
+        }));
+    }
+
+    saveColor = () => {
+        var colorProperty = this.state.colorProperty;
+        var colorControl = this.state.colorControl;
+        this.setState(update(this.state, {
+            $unset: ['colorControl', 'colorProperty'],
+            control: {
+                [colorProperty]: { $set: colorControl }
+            },
+            modalVisible: { $set: false }
+        }));
+    }
+
     renderPadsMenu = () => {
         if (this.state.isMenuOpen) {
             return (
@@ -108,62 +139,36 @@ class GamepadEditor extends React.Component {
         return null;
     }
 
-    // renderPicker = () => {
-    //     const options = [];
-    //     options.push({ key: 'H', label: 'Horizontal' });
-    //     options.push({ key: 'V', label: 'Vertical' });
-    //     var label = this.control && this.control.orientation !== '' ? options.filter(x => x.key == this.control.orientation)[0].label : `Choix de l'orientation`
-
-    //     if (Platform.OS === 'ios') {
-    //         return (
-    //             <ModalSelector
-    //                 data={options}
-    //                 initValue={label}
-    //                 onChange={(option) => { this.control.orientation = `${option.value}`; this.saveControl() }} />
-    //         );
-    //     } else if (Platform.OS === 'android') {
-    //         return (
-    //             <Picker style={styles.input} mode='dropdown' selectedValue={this.control.orientation} onValueChange={(itemValue, itemIndex) => { this.control.orientation = `${itemValue}`; this.saveControl() }}>
-    //                 {options.map((item, index) => {
-    //                     return (< Picker.Item label={item.label} value={item.value} key={item.value} />);
-    //                 })}
-    //             </Picker>
-    //         );
-    //     }
-
-    // }
-
     renderSetting = () => {
         if (this.state.isSettingOpen) {
+            console.log(this.state.control.activeColor);
             return (
                 <View style={styles.sideMenu}>
                     <View style={[styles.controls, styles.form]}>
                         <ScrollView>
                             <View style={styles.formGroup}>
-                                <Text style={styles.label}>Nom</Text>
-                                <TextInput style={styles.input} onEndEditing={(event) => { this.saveControl('label', event.nativeEvent.text); }} placeholder='Nom' autoCapitalize='none' autoCorrect={false} />
+                                <Text style={styles.label}>Label</Text>
+                                <TextInput style={styles.input} defaultValue={this.state.control.label} onEndEditing={event => this.saveControl('label', event.nativeEvent.text)} placeholder='Label' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Commande</Text>
-                                <TextInput style={styles.input} onEndEditing={(event) => { this.saveControl('name', event.nativeEvent.text); }} placeholder='Commande' autoCapitalize='none' autoCorrect={false} />
+                                <TextInput style={styles.input} defaultValue={this.state.control.name} onEndEditing={event => this.saveControl('name', event.nativeEvent.text)} placeholder='Commande' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur minimun</Text>
-                                <TextInput style={styles.input} onEndEditing={(event) => { this.saveControl('minValue', event.nativeEvent.text); }} placeholder='Valeur minimun' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={this.state.control.minValue} onEndEditing={event => this.saveControl('minValue', event.nativeEvent.text)} placeholder='Valeur minimun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur maximun</Text>
-                                <TextInput style={styles.input} onEndEditing={(event) => { this.saveControl('maxValue', event.nativeEvent.text); }} placeholder='Valeur maximun' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={this.state.control.maxValue} onEndEditing={event => this.saveControl('maxValue', event.nativeEvent.text)} placeholder='Valeur maximun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} onEndEditing={(event) => { this.saveControl('defaultValue', event.nativeEvent.text); }} placeholder='Valeur par défault' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={this.state.control.defaultValue} onEndEditing={event => this.saveControl('defaultValue', event.nativeEvent.text)} placeholder='Valeur par défault' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
-                                <Switch style={styles.input} value={this.state.control.keepValue} onValueChange={(val) => {
-                                    this.saveControl('keepValue', val);
-                                }} />
+                                <Switch style={styles.input} value={this.state.control.keepValue} onValueChange={val => this.saveControl('keepValue', val)} />
                             </View>
                             {
                                 (() => {
@@ -171,9 +176,7 @@ class GamepadEditor extends React.Component {
                                         return (
                                             <View style={styles.formGroup}>
                                                 <Text style={styles.label}>Horizontal</Text>
-                                                <Switch style={styles.input} value={this.state.control.orientation == 'H' ? true : false} onValueChange={(val) => {
-                                                    this.saveControl('orientation', val ? 'H' : 'V');
-                                                }} />
+                                                <Switch style={styles.input} value={this.state.control.orientation == 'H' ? true : false} onValueChange={val => this.saveControl('orientation', val ? 'H' : 'V')} />
                                             </View>
                                         );
                                     }
@@ -181,26 +184,28 @@ class GamepadEditor extends React.Component {
                             }
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Couleur active</Text>
-                                <TouchableHighlight style={styles.input} onPress={() => {
-                                    this.colorProperty = 'activeColor';
-                                    this.setState(update(this.state, {
-                                        colorControl: { $set: this.state.control.inactiveColor ? this.state.control.inactiveColor : '#ee0000' }
-                                    }));
-                                    this.setModalVisible(true);
-                                }}>
-                                    {this.state.control && this.state.control.activeColor ? <Text style={{ flex: 1, backgroundColor: this.state.control.activeColor }}></Text> : <Text>Choisir une couleur</Text>}
+                                <TouchableHighlight style={styles.input} onPress={() => this.pressColor('activeColor')}>
+                                    {
+                                        (() => {
+                                            if (this.state.control && this.state.control.activeColor) {
+                                                return (<Text style={{ flex: 1, backgroundColor: this.state.control.activeColor }}></Text>);
+                                            }
+                                            return (<Text>Choisir une couleur</Text>);
+                                        })()
+                                    }
                                 </TouchableHighlight>
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Couleur inactive</Text>
-                                <TouchableHighlight style={styles.input} onPress={() => {
-                                    this.colorProperty = 'inactiveColor';
-                                    this.setState(update(this.state, {
-                                        colorControl: { $set: this.state.control.inactiveColor ? this.state.control.inactiveColor : '#ee0000' }
-                                    }));
-                                    this.setModalVisible(true);
-                                }}>
-                                    {this.state.control && this.state.control.inactiveColor ? <Text style={{ flex: 1, backgroundColor: this.state.control.inactiveColor }}></Text> : <Text>Choisir une couleur</Text>}
+                                <TouchableHighlight style={styles.input} onPress={() => this.pressColor('inactiveColor')}>
+                                    {
+                                        (() => {
+                                            if (this.state.control && this.state.control.inactiveColor) {
+                                                return (<Text style={{ flex: 1, backgroundColor: this.state.control.inactiveColor }}></Text>);
+                                            }
+                                            return (<Text>Choisir une couleur</Text>);
+                                        })()
+                                    }
                                 </TouchableHighlight>
                             </View>
                         </ScrollView>
@@ -217,25 +222,14 @@ class GamepadEditor extends React.Component {
         return null;
     }
 
-    setModalVisible = (visible) => {
-        this.setState(update(this.state, {
-            modalVisible: { $set: visible }
-        }));
-    }
-
-    onColorChange = (color) => {
-        this.setState(update(this.state, {
-            colorControl: { $set: color }
-        }));
-    }
-
     renderModalColorPicker = () => {
         if (this.state.colorControl) {
             return (
-                <Modal style={{ flex: 1 }} animationType='none' transparent={true} visible={this.state.modalVisible} onRequestClose={() => { alert('Modal has been closed.') }} >
-                    {/* <View style={{ flex: 1, flexDirection: 'column', padding: 20 }}>
+                <Modal style={{ flex: 1, backgroundColor: 'white' }} animationType='none' transparent={false} visible={this.state.modalVisible} supportedOrientations={['portrait', 'landscape']}
+                    onRequestClose={() => { alert('Modal has been closed.') }} >
+                    <View style={{ flex: 1, flexDirection: 'column', padding: 20 }}>
                         <Text style={{ color: 'black', fontWeight: 'bold' }}>
-                            Couleur {this.colorProperty == 'activeColor' ? 'active' : 'inactive'}
+                            Couleur {this.state.colorProperty == 'activeColor' ? 'active' : 'inactive'}
                         </Text>
                         <View style={{ flex: 1 }}>
                             <ColorWheel initialColor={this.state.colorControl} onColorChange={this.onColorChange}
@@ -243,26 +237,19 @@ class GamepadEditor extends React.Component {
                                 thumbStyle={{ height: 30, width: 30, borderRadius: 30 }} />
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
-                            <TouchableHighlight onPress={() => {
-                                this.control[this.colorProperty] = this.state.colorControl;
-                                this.setState(update(this.state, {
-                                    $unset: ['colorControl']
-                                }));
-                                this.setModalVisible(!this.state.modalVisible);
-                                this.saveControl();
-                            }}>
+                            <TouchableHighlight onPress={this.saveColor}>
                                 <Text style={{ color: 'black' }}>Valider</Text>
                             </TouchableHighlight>
                             <TouchableHighlight onPress={() => {
                                 this.setState(update(this.state, {
-                                    $unset: ['colorControl']
+                                    $unset: ['colorControl', 'colorProperty'],
+                                    modalVisible: { $set: !this.state.modalVisible }
                                 }));
-                                this.setModalVisible(!this.state.modalVisible);
                             }}>
                                 <Text style={{ color: 'black', marginLeft: 5 }}>Annuler</Text>
                             </TouchableHighlight>
                         </View>
-                    </View> */}
+                    </View>
                 </Modal>
             );
         }

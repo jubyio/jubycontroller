@@ -7,11 +7,17 @@ import { Slider } from 'react-native-elements';
 
 import { editControl } from '../actions';
 
-const Stick = ({ id, stick }) => (
-    <View style={{ width: stick.width, height: stick.height }}>
-        <Slider />
-    </View>
-);
+class Stick extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (<View style={{ width: this.props.stick.width, height: this.props.stick.height }}>
+                <Slider />
+            </View>);
+    }
+}
 
 Stick.propTypes = {
     id: PropTypes.string.isRequired,

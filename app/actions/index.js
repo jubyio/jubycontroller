@@ -87,7 +87,7 @@ export const initControl = (type , window) => ({
     type: type,
     name: null,
     label: null,
-    keepValue: null,
+    keepValue: false,
     value: null,
     minValue: null,
     maxValue: null,
@@ -100,8 +100,8 @@ export const initControl = (type , window) => ({
     scale: 1,
     width: type == ControlTypes.STICK ? window.width / 5 : 50,
     height: type == ControlTypes.STICK ? window.height / 10 : 50,
-    activeColor: 'red',
-    inactiveColor: 'gray'
+    activeColor: '#ffffff',
+    inactiveColor: '#d3d3d3'
 })
 
 /*
