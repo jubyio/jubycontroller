@@ -26,6 +26,7 @@ import { initControl, addControl, editControl } from '../actions';
 
 import { Button, Icon, SideMenu } from 'react-native-elements';
 import { ColorWheel } from 'react-native-color-wheel';
+import { ColorPalette } from './ColorPalette';
 
 class GamepadEditor extends React.Component {
     colorProperty = null;
@@ -232,9 +233,10 @@ class GamepadEditor extends React.Component {
                             Couleur {this.state.colorProperty == 'activeColor' ? 'active' : 'inactive'}
                         </Text>
                         <View style={{ flex: 1 }}>
-                            <ColorWheel initialColor={this.state.colorControl} onColorChange={this.onColorChange}
+                        <ColorPalette />
+                            {/* <ColorWheel initialColor={this.state.colorControl} onColorChange={this.onColorChange}
                                 style={{ width: Dimensions.get('window').width }}
-                                thumbStyle={{ height: 30, width: 30, borderRadius: 30 }} />
+                                thumbStyle={{ height: 30, width: 30, borderRadius: 30 }} /> */}
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                             <TouchableHighlight onPress={this.saveColor}>
