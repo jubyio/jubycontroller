@@ -8,7 +8,7 @@ import update from 'immutability-helper';
 
 import GamepadList from './GamepadList';
 
-import { initGamepad, editGamepad, deleteGamepad } from '../actions';
+import { initGamepad, editGamepad, saveGamepad, deleteGamepad } from '../actions';
 
 class GamepadsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -20,7 +20,7 @@ class GamepadsScreen extends React.Component {
     this.state = {
       selectedGamepad: null,
       modalVisible: false,
-      text: 'test'
+      text: null
     };
   }
 
@@ -39,8 +39,19 @@ class GamepadsScreen extends React.Component {
 
   setModalVisible = (visibility) => {
     this.setState(update(this.state, {
-      modalVisible: { $set: visibility },
+      modalVisible: { $set: visibility }
     }));
+  }
+
+  saveGamepad = () => {
+    var gamepad = this.props.gamepads.find(x => x.id === this.state.selectedGamepad.id);
+    gamepad.name = this.state.text;
+    const state = update(this.state, {
+      selectedGamepad: { $set: null },
+      modalVisible: { $set: false }
+    });
+    this.setState(state);
+    this.props.saveGamepad(gamepad);
   }
 
   renderHeader = () => {
@@ -75,26 +86,25 @@ class GamepadsScreen extends React.Component {
   renderEditModal = () => {
     const { selectedGamepad, modalVisible } = this.state;
     if (selectedGamepad) {
-      var nameGamepad = selectedGamepad.name;
       return (
         <Modal
+          style={{ flex: 1, backgroundColor: 'white' }}
+          supportedOrientations={['portrait', 'landscape']}
           animationType="slide"
           transparent={false}
           visible={modalVisible}
           onRequestClose={() => { }}
         >
           <View style={styles.modal}>
-            <Text>Modifier le nom du gamepad</Text>
-            {/* <TextInput style={{ height: 40 }} value={selectedGamepad.namer} placeholder='Nom' autoCapitalize='none' autoCorrect={false} ref={input =>selectedGamepad.name = input} /> */}
-            <TextInput style={{ height: 40 }} placeholder='Nom' autoCapitalize='none' autoCorrect={false} ref={input => selectedGamepad.name = input} />
+            <View>
+              <Text>Modifier le nom du gamepad</Text>
+              <TextInput style={{ height: 40 }} defaultValue={selectedGamepad.name}
+                onEndEditing={event => this.setState(update(this.state, {
+                  text: { $set: event.nativeEvent.text }
+                }))} placeholder='Nom' autoCapitalize='none' autoCorrect={false} />
+            </View>
             <View style={styles.actions}>
-              <TouchableHighlight onPress={() => {
-                this.setModalVisible(!modalVisible);
-                this.setState(update(this.state, {
-                  selectedGamepad: { name: { $set: this.state.text } }
-                }))
-                editGamepad(selectedGamepad);
-              }}>
+              <TouchableHighlight onPress={this.saveGamepad}>
                 <Text>Valider</Text>
               </TouchableHighlight>
               <TouchableHighlight onPress={() => {
@@ -113,7 +123,7 @@ class GamepadsScreen extends React.Component {
     return (
       <View style={styles.main}>
         {this.renderHeader()}
-        <GamepadList navigation={this.props.navigation} style={styles.list} onSelected={this.onSelected} />
+        <GamepadList selectedGamepad={this.state.selectedGamepad} navigation={this.props.navigation} style={styles.list} onSelected={this.onSelected} />
         {this.renderEditModal()}
       </View>
     );
@@ -175,9 +185,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  gamepads: state.domain.gamepads
 });
 
 const mapDispatchToProps = dispatch => ({
+  saveGamepad: (gamepad) => dispatch(saveGamepad(gamepad)),
   deleteGamepad: (gamepad) => dispatch(deleteGamepad(gamepad.id))
 })
 

@@ -141,42 +141,42 @@ class GamepadEditor extends React.Component {
 
     renderSetting = () => {
         if (this.state.isSettingOpen) {
-            console.log(this.state.control.activeColor);
+            const { control } = this.state;
             return (
                 <View style={styles.sideMenu}>
                     <View style={[styles.controls, styles.form]}>
                         <ScrollView>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Label</Text>
-                                <TextInput style={styles.input} defaultValue={this.state.control.label} onEndEditing={event => this.saveControl('label', event.nativeEvent.text)} placeholder='Label' autoCapitalize='none' autoCorrect={false} />
+                                <TextInput style={styles.input} defaultValue={control.label} onEndEditing={event => this.saveControl('label', event.nativeEvent.text)} placeholder='Label' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Commande</Text>
-                                <TextInput style={styles.input} defaultValue={this.state.control.name} onEndEditing={event => this.saveControl('name', event.nativeEvent.text)} placeholder='Commande' autoCapitalize='none' autoCorrect={false} />
+                                <TextInput style={styles.input} defaultValue={control.name} onEndEditing={event => this.saveControl('name', event.nativeEvent.text)} placeholder='Commande' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur minimun</Text>
-                                <TextInput style={styles.input} defaultValue={this.state.control.minValue} onEndEditing={event => this.saveControl('minValue', event.nativeEvent.text)} placeholder='Valeur minimun' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.minValue} onEndEditing={event => this.saveControl('minValue', event.nativeEvent.text)} placeholder='Valeur minimun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur maximun</Text>
-                                <TextInput style={styles.input} defaultValue={this.state.control.maxValue} onEndEditing={event => this.saveControl('maxValue', event.nativeEvent.text)} placeholder='Valeur maximun' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.maxValue} onEndEditing={event => this.saveControl('maxValue', event.nativeEvent.text)} placeholder='Valeur maximun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} defaultValue={this.state.control.defaultValue} onEndEditing={event => this.saveControl('defaultValue', event.nativeEvent.text)} placeholder='Valeur par défault' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.defaultValue} onEndEditing={event => this.saveControl('defaultValue', event.nativeEvent.text)} placeholder='Valeur par défault' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
-                                <Switch style={styles.input} value={this.state.control.keepValue} onValueChange={val => this.saveControl('keepValue', val)} />
+                                <Switch style={styles.input} value={control.keepValue} onValueChange={val => this.saveControl('keepValue', val)} />
                             </View>
                             {
                                 (() => {
-                                    if (this.state.control.type === ControlTypes.STICK) {
+                                    if (control.type === ControlTypes.STICK) {
                                         return (
                                             <View style={styles.formGroup}>
                                                 <Text style={styles.label}>Horizontal</Text>
-                                                <Switch style={styles.input} value={this.state.control.orientation == 'H' ? true : false} onValueChange={val => this.saveControl('orientation', val ? 'H' : 'V')} />
+                                                <Switch style={styles.input} value={control.orientation == 'H' ? true : false} onValueChange={val => this.saveControl('orientation', val ? 'H' : 'V')} />
                                             </View>
                                         );
                                     }
@@ -187,8 +187,8 @@ class GamepadEditor extends React.Component {
                                 <TouchableHighlight style={styles.input} onPress={() => this.pressColor('activeColor')}>
                                     {
                                         (() => {
-                                            if (this.state.control && this.state.control.activeColor) {
-                                                return (<Text style={{ flex: 1, backgroundColor: this.state.control.activeColor }}></Text>);
+                                            if (control && control.activeColor) {
+                                                return (<Text style={{ flex: 1, backgroundColor: control.activeColor }}></Text>);
                                             }
                                             return (<Text>Choisir une couleur</Text>);
                                         })()
@@ -200,8 +200,8 @@ class GamepadEditor extends React.Component {
                                 <TouchableHighlight style={styles.input} onPress={() => this.pressColor('inactiveColor')}>
                                     {
                                         (() => {
-                                            if (this.state.control && this.state.control.inactiveColor) {
-                                                return (<Text style={{ flex: 1, backgroundColor: this.state.control.inactiveColor }}></Text>);
+                                            if (control && control.inactiveColor) {
+                                                return (<Text style={{ flex: 1, backgroundColor: control.inactiveColor }}></Text>);
                                             }
                                             return (<Text>Choisir une couleur</Text>);
                                         })()
