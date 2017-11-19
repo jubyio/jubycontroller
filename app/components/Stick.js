@@ -12,10 +12,15 @@ class Stick extends React.Component {
         super(props);
     }
 
+    onChange = (value) => {
+        console.log(`value to send: ${value} for command: ${this.props.stick.name}`);
+    }
+
     render() {
-        return (<View style={{ width: this.props.stick.width, height: this.props.stick.height }}>
-                <Slider />
-            </View>);
+        const { stick } = this.props;
+        return (<View style={{ width: stick.width, height: stick.height }}>
+            <Slider thumbStyle={{ backgroundColor: stick.activeColor }} onValueChange={this.onChange} value={stick.defaultValue} minimumValue={stick.minValue && stick.maxValue ? stick.minValue : 0} maximumValue={stick.maxValue && stick.minValue ? stick.maxValue : 1} />
+        </View>);
     }
 }
 

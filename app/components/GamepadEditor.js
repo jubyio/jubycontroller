@@ -156,15 +156,15 @@ class GamepadEditor extends React.Component {
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur minimun</Text>
-                                <TextInput style={styles.input} defaultValue={control.minValue} onEndEditing={event => this.saveControl('minValue', event.nativeEvent.text)} placeholder='Valeur minimun' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.minValue ? `${control.minValue}` : ''} onEndEditing={event => this.saveControl('minValue', parseInt(event.nativeEvent.text, 10))} placeholder='Valeur minimun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur maximun</Text>
-                                <TextInput style={styles.input} defaultValue={control.maxValue} onEndEditing={event => this.saveControl('maxValue', event.nativeEvent.text)} placeholder='Valeur maximun' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.maxValue ? `${control.maxValue}` : ''} onEndEditing={event => this.saveControl('maxValue', parseInt(event.nativeEvent.text, 10))} placeholder='Valeur maximun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} defaultValue={control.defaultValue} onEndEditing={event => this.saveControl('defaultValue', event.nativeEvent.text)} placeholder='Valeur par défault' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.defaultValue ? `${control.defaultValue}` : ''} onEndEditing={event => this.saveControl('defaultValue', parseInt(event.nativeEvent.text), 10)} placeholder='Valeur par défault' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
