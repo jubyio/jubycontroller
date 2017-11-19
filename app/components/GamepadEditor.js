@@ -131,7 +131,7 @@ class GamepadEditor extends React.Component {
                     </View>
                     <View style={styles.overlay}>
                         <TouchableWithoutFeedback onPress={this.togglePadsMenu}>
-                            <View style={{ flex: 1 }} />
+                            <View style={{ flex: 1 }} />    
                         </TouchableWithoutFeedback>
                     </View>
                 </View>)

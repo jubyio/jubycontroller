@@ -161,7 +161,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
                         left: control.position.x,
                         transform: [
                             { scale: control.scale == null ? 1 : control.scale },
-                            { rotate: control.orientation == 'H' ? '0deg' : '90deg' }
+                            { rotate: control.orientation == 'H' ? '0deg' : '270deg' }
                         ]
                     }]}>
                         {this.renderControl(control)}
