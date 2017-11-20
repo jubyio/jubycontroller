@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Slider } from 'react-native-elements';
@@ -18,10 +18,11 @@ class Stick extends React.Component {
 
     render() {
         const { stick } = this.props;
-        return (<View style={{ width: stick.width, height: stick.height }}>
+        return (<View style={{ width: stick.width, height: stick.height + 20 }}>
             <Slider thumbStyle={{ backgroundColor: stick.activeColor }} onValueChange={this.onChange}
                 value={stick.defaultValue} minimumValue={stick.minValue && stick.maxValue ? stick.minValue : 0}
                 maximumValue={stick.maxValue && stick.minValue ? stick.maxValue : 1} />
+            <Text style={{ flex: 1, textAlign: 'center' }}>{stick.label}</Text>
         </View>);
     }
 }
