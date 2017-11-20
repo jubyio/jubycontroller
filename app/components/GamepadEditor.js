@@ -113,13 +113,15 @@ class GamepadEditor extends React.Component {
     saveColor = () => {
         var colorProperty = this.state.colorProperty;
         var colorControl = this.state.colorControl;
-        this.setState(update(this.state, {
+        var state = update(this.state, {
             $unset: ['colorControl', 'colorProperty'],
             control: {
                 [colorProperty]: { $set: colorControl }
             },
             modalVisible: { $set: false }
-        }));
+        });
+        this.setState(state);
+        this.props.editControl(state.control);
     }
 
     renderPadsMenu = () => {
@@ -189,7 +191,7 @@ class GamepadEditor extends React.Component {
                                     {
                                         (() => {
                                             if (control && control.activeColor) {
-                                                return (<Text style={{ flex: 1, backgroundColor: control.activeColor }}></Text>);
+                                                return (<Text style={{ flex: 1, backgroundColor: control.activeColor, borderWidth: 1, borderColor: 'rgb(0, 0, 0)' }}></Text>);
                                             }
                                             return (<Text>Choisir une couleur</Text>);
                                         })()
@@ -202,7 +204,7 @@ class GamepadEditor extends React.Component {
                                     {
                                         (() => {
                                             if (control && control.inactiveColor) {
-                                                return (<Text style={{ flex: 1, backgroundColor: control.inactiveColor }}></Text>);
+                                                return (<Text style={{ flex: 1, backgroundColor: control.inactiveColor, borderWidth: 1, borderColor: 'rgb(0, 0, 0)' }}></Text>);
                                             }
                                             return (<Text>Choisir une couleur</Text>);
                                         })()
@@ -226,17 +228,15 @@ class GamepadEditor extends React.Component {
     renderModalColorPicker = () => {
         if (this.state.colorControl) {
             return (
-                <Modal style={{ flex: 1, backgroundColor: 'white' }} animationType='none' transparent={false} visible={this.state.modalVisible} supportedOrientations={['portrait', 'landscape']}
-                    onRequestClose={() => { alert('Modal has been closed.') }} >
+                <Modal style={{ flex: 1, backgroundColor: 'white' }} animationType='none'
+                    transparent={false} visible={this.state.modalVisible} supportedOrientations={['portrait', 'landscape']}
+                    onRequestClose={() => { console.log("Modal has been closed.")} } >
                     <View style={{ flex: 1, flexDirection: 'column', padding: 20 }}>
                         <Text style={{ color: 'black', fontWeight: 'bold' }}>
                             Couleur {this.state.colorProperty == 'activeColor' ? 'active' : 'inactive'}
                         </Text>
                         <View style={{ flex: 1 }}>
-                        <ColorPalette />
-                            {/* <ColorWheel initialColor={this.state.colorControl} onColorChange={this.onColorChange}
-                                style={{ width: Dimensions.get('window').width }}
-                                thumbStyle={{ height: 30, width: 30, borderRadius: 30 }} /> */}
+                            <ColorPalette initialColor={this.state.colorControl} onColorChange={this.onColorChange} />
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                             <TouchableHighlight onPress={this.saveColor}>
