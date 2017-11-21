@@ -45,8 +45,10 @@ export class ColorPalette extends React.Component {
                             backgroundColor: val.value,
                             borderWidth: initialColor !== null && initialColor === val.value ? 1 : 0,
                             borderColor: 'rgba(0,0,0,1)',
-                            width: initialColor !== null && initialColor === val.value ? 94 : 64,
-                            height: initialColor !== null && initialColor === val.value ? 94 : 64
+                            width: 64,
+                            height: 64,
+                            zIndex: initialColor !== null && initialColor === val.value ? 1000 : 1,
+                            transform: [{ scale: initialColor !== null && initialColor === val.value ? 1.5 : 1 }]
                         }}>
                         </TouchableOpacity>)
                     })}
