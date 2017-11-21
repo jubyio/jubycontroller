@@ -61,17 +61,10 @@ export const unlockOrientation = () => (
 )
 
 //Runtime
-export const moveStick = (stick) => (
+export const controlValueChanged = (control) => (
     {
         type: STICK_VALUE_CHANGED,
-        stick
-    }
-)
-
-export const actionButton = (button) => (
-    {
-        type: STICK_VALUE_CHANGED,
-        button
+        control
     }
 )
 

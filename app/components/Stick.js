@@ -7,14 +7,35 @@ import { Slider } from 'react-native-elements';
 
 import { editControl } from '../actions';
 
-const Stick = ({ id, stick }) => (
-    <View style={{ width: stick.width, height: stick.height }}>
-        <Slider />
-    </View>
-);
+class Stick extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            value: props.stick.defaultValue
+        }
+    }
+    //= ({ id, stick }) => {
+
+    onReleaseTouch = () => {
+        if (!this.props.keepValue) {
+            this.setState({...this.state, value: props.stick.defaultValue})
+        }
+    }
+
+    render() {
+        return (
+            <View style={{ width: stick.width, height: stick.height }} >
+                <Slider value={this.state.value} onSlidingComplete={() => onReleaseTouch} />
+            </View>)
+    }
+
+}
 
 Stick.propTypes = {
     id: PropTypes.string.isRequired,
+    stick: PropTypes.object.isRequired,
+    sendValue: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => ({
@@ -22,6 +43,7 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stick);

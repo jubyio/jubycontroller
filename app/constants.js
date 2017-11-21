@@ -8,8 +8,9 @@ export const EDIT_CONTROL = 'MOVE_STICK';
 export const CANCEL_GAMEPAD = 'CANCEL_GAMEPAD';
 
 //Running
-export const STICK_VALUE_CHANGED = 'STICK_VALUE_CHANGED';
-export const BUTTON_PRESSED = 'BUTTON_PRESSED';
+export const CONTROL_VALUE_CHANGED = 'STICK_VALUE_CHANGED';
+export const CONNECT = 'CONNECT';
+export const PING = 'PING';
 
 //Device features
 export const LOCK_LANDSCAPE = 'LOCK_LANDSCAPE';
