@@ -78,12 +78,42 @@ export const initGamepad = () => ({
 export const initControl = (type , window) => ({
     id: uuid(),
     type: type,
+    name: null,
+    label: null,
+    keepValue: false,
+    value: null,
+    minValue: null,
+    maxValue: null,
+    defaultValue: null,
+    orientation: 'H',
     position: {
         x: window.width / 2,
         y: window.height / 2
     },
     scale: 1,
     width: type == ControlTypes.STICK ? window.width / 5 : 50,
-    height: type == ControlTypes.STICK ? window.height / 10 : 50
-
+    height: type == ControlTypes.STICK ? window.height / 10 : 50,
+    activeColor: '#ffffff',
+    inactiveColor: '#d3d3d3'
 })
+
+/*
+{
+    "type": "STICK | BUTTON",
+    "id": "guid",
+    "name": "DIRECTION",
+    "label": "direction",
+    "keepValue": true,
+    "value": 1.0,
+    "minValue": 0.0,
+    "maxValue": 2.0,
+    "defaultValue": 0.2,
+    "orientation": "V | H",
+    "position" : { "x": 333, "y": 34},
+    "scale": 1.0,
+    "width" : 200,
+    "height": 50,
+    "activeColor": "red",
+    "inactiveColor": "green"
+}
+*/

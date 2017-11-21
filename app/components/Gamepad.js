@@ -47,7 +47,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         this.initialTouches = getTouches(event);
         let clickedControl = this.findTouchedControl(pageX, pageY);
 
-        if (this.state.selectedRef && this.state.selected !== clickedControl.id) {
+        if (clickedControl && this.state.selectedRef && this.state.selected !== clickedControl.id) {
             this.unSelected();
         }
         if (clickedControl) {
@@ -60,7 +60,9 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
                     borderWidth: 2,
                     borderColor: '#000000'
                 }
-            })
+            });
+            this.props.onSelect(clickedControl);
+
             this.currentScale = style[0].transform[0].scale;
             this.prevLeft = clickedControl.position.x;
             this.prevTop = clickedControl.position.y;
@@ -130,6 +132,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
             })
         }
         this.setState({ selected: null, selectedRef: null });
+        this.props.onSelect(null);
     }
 
     renderControl = (control) => {
@@ -152,7 +155,15 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         return (<View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: '#a8a4a7' }} {...this.panResponder.panHandlers}>
             {this.props.gamepad.controls.map((control) => {
                 return (
-                    <View ref={control.id} key={control.id} style={[{ position: 'absolute', top: control.position.y, left: control.position.x, transform: [{ scale: control.scale }] }]}>
+                    <View ref={control.id} key={control.id} style={[{
+                        position: 'absolute',
+                        top: control.position.y,
+                        left: control.position.x,
+                        transform: [
+                            { scale: control.scale == null ? 1 : control.scale },
+                            { rotate: control.orientation == 'H' ? '0deg' : '270deg' }
+                        ]
+                    }]}>
                         {this.renderControl(control)}
                     </View>
                 )
@@ -163,7 +174,8 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
 
 Gamepad.propTypes = {
     gamepad: PropTypes.object.isRequired,
-    isInEditMode: PropTypes.bool
+    isInEditMode: PropTypes.bool,
+    onSelect: PropTypes.func
 }
 
 const mapStateToProps = (state) => ({

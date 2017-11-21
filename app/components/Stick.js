@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Slider } from 'react-native-elements';
@@ -8,14 +8,16 @@ import { Slider } from 'react-native-elements';
 import { editControl } from '../actions';
 
 class Stick extends React.Component {
-
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             value: props.stick.defaultValue
         }
     }
-    //= ({ id, stick }) => {
+
+    onChange = (value) => {
+        console.log(`value to send: ${value} for command: ${this.props.stick.name}`);
+    }
 
     onReleaseTouch = () => {
         if (!this.props.keepValue) {
@@ -24,12 +26,14 @@ class Stick extends React.Component {
     }
 
     render() {
-        return (
-            <View style={{ width: stick.width, height: stick.height }} >
-                <Slider value={this.state.value} onSlidingComplete={() => onReleaseTouch} />
-            </View>)
+        const { stick } = this.props;
+        return (<View style={{ width: stick.width, height: stick.height + 20 }}>
+            <Slider thumbStyle={{ backgroundColor: stick.activeColor }} onValueChange={this.onChange} onSlidingComplete={() => onReleaseTouch}
+                value={stick.defaultValue} minimumValue={stick.minValue && stick.maxValue ? stick.minValue : 0}
+                maximumValue={stick.maxValue && stick.minValue ? stick.maxValue : 1} />
+            <Text style={{ flex: 1, textAlign: 'center' }}>{stick.label}</Text>
+        </View>);
     }
-
 }
 
 Stick.propTypes = {
