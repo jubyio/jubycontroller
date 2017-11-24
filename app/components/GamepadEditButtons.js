@@ -42,7 +42,7 @@ class GamepadEditButtons extends React.Component {
         switch (stateBack) {    
             case StateBack.EXIT:
                 if (this.props.gamepad.isNew) {
-                    this.saveGamepad(this.props.gamepad);
+                    this.props.saveGamepad(this.props.gamepad);
                 }
                 navigation.goBack();
                 unlockOrientation();
