@@ -28,7 +28,7 @@ class GamepadScreen extends React.Component {
   }
 
   switchToEdit = () => {
-    this.setState({ isInEdit: true });
+    this.setState({ isInEdit: !this.state.isInEdit });
   }
 
   renderValidateEditButton = () => {
