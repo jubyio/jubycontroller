@@ -5,9 +5,19 @@ import { Icon } from 'react-native-elements';
 import { saveGamepad, unlockOrientation } from '../actions';
 import { StateBack } from '../constants';
 
-const GamepadEditButtons = ({ isInEdit, navigation, switchToEdit, gamepad, saveGamepad, unlockOrientation }) => {
+// const GamepadEditButtons = ({ isInEdit, navigation, switchToEdit, gamepad, saveGamepad, unlockOrientation }) => {
+class GamepadEditButtons extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            oldGamepad: this.props.gamepad
+        }
+    }
 
     renderValidateEditButton = () => {
+        const { switchToEdit } = this.props;
         return (
             <View style={[styles.buttons]}>
                 <Icon containerStyle={{ backgroundColor: '#61b7ed' }} style={styles.icon}
@@ -28,14 +38,21 @@ const GamepadEditButtons = ({ isInEdit, navigation, switchToEdit, gamepad, saveG
     }
 
     goBack = (stateBack) => {
-        switch (stateBack) {
+        const { switchToEdit, navigation, unlockOrientation } = this.props;
+        switch (stateBack) {    
             case StateBack.EXIT:
+                if (this.props.gamepad.isNew) {
+                    this.saveGamepad(this.props.gamepad);
+                }
                 navigation.goBack();
                 unlockOrientation();
                 break;
             case StateBack.EXITEDITING:
                 switchToEdit();
             case StateBack.CANCEL:
+                if (JSON.stringify(this.state.oldGamepad) !== JSON.stringify(this.props.gamepad) && !this.props.gamepad.isNew) {
+                    this.props.saveGamepad(this.state.oldGamepad);
+                }
                 switchToEdit();
                 break;
             default:
@@ -43,18 +60,21 @@ const GamepadEditButtons = ({ isInEdit, navigation, switchToEdit, gamepad, saveG
         }
     }
 
-    return (
-        <View style={[styles.buttons]}>{
-            (() => {
-                if (isInEdit) {
-                    return renderEditing()
-                } else {
-                    return renderValidateEditButton()
-                }
-            })()
-        }
-        </View>
-    )
+    render() {
+        const { isInEdit } = this.props;
+        return (
+            <View style={[styles.buttons]}>{
+                (() => {
+                    if (isInEdit) {
+                        return this.renderEditing()
+                    } else {
+                        return this.renderValidateEditButton()
+                    }
+                })()
+            }
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
