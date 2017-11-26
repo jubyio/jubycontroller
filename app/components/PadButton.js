@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, TouchableOpacity, Text } from 'react-native';
 import update from 'immutability-helper';
 import { connect } from 'react-redux';
@@ -21,13 +22,12 @@ class PadButton extends React.Component {
         } else if (value === button.minValue) {
             value = button.maxValue;
         }
-        var state = update(this.state, {
+        this.setState(update(this.state, {
             isActive: { $set: !isActive },
             button: {
                 value: { $set: value }
             }
-        });
-        this.setState(state);
+        }));
         console.log(`value to send: ${value} for command: ${button.name}`);
     }
 
@@ -36,7 +36,7 @@ class PadButton extends React.Component {
         return (
             <View>
                 <TouchableOpacity
-                    onPress={this.onPress}
+                    onPress={() => this.onPress}
                     style={{
                         borderWidth: 1,
                         borderColor: 'rgba(0,0,0,0.2)',
@@ -47,18 +47,23 @@ class PadButton extends React.Component {
                         backgroundColor: isActive ? button.activeColor : button.inactiveColor,
                         borderRadius: button.width,
                     }}>
-                    <Text>{button.label || 'A'}</Text>
+                    <Text>{button.label || ''}</Text>
                 </TouchableOpacity>
             </View>
         )
     }
 }
 
-const mapStateToProps = (state) => ({
+PadButton.propTypes = {
+    id: PropTypes.string.isRequired
+}
+
+const mapStateToProps = (state, ownProps) => ({
+    button: state.config.gamepad.controls.find(c => c.id === ownProps.id)    
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    valueChange: dispatch({ type: '' })
+    // valueChange: dispatch({ type: '' })
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadButton);

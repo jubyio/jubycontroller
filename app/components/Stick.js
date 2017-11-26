@@ -41,9 +41,7 @@ class Stick extends React.Component {
 }
 
 Stick.propTypes = {
-    id: PropTypes.string.isRequired,
-    stick: PropTypes.object.isRequired,
-    // sendValue: PropTypes.func.isRequired
+    id: PropTypes.string.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => ({
