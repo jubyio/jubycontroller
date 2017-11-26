@@ -3,7 +3,7 @@
 Installation :
 
 - Install React Native (https://facebook.github.io/react-native/docs/getting-started.html)
-- Install React Native CLI (`react-native-cli`)
+- Install React Native CLI (`npm install react-native-cli`)
 - Install package (`npm install`)
 
 # Deployement
