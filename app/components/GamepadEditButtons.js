@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Modal, Alert } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { saveGamepad, unlockOrientation, editControl } from '../actions';
 import { StateBack } from '../constants';
@@ -32,9 +32,18 @@ class GamepadEditButtons extends React.Component {
             <View style={[styles.buttons]}>
                 <Icon containerStyle={{ backgroundColor: '#61b7ed' }} style={styles.icon}
                     name='check' size={36} color='#66b23e' onPress={() => this.goBack(StateBack.EXITEDITING)} />
-                <Icon containerStyle={{ backgroundColor: '#61b7ed' }} style={styles.icon} name='close' size={36} color='#d64455' onPress={() => this.goBack(StateBack.CANCEL)} />
+                <Icon containerStyle={{ backgroundColor: '#61b7ed' }} style={styles.icon} name='close' size={36} color='#d64455' onPress={() => this.cancel() } />
             </View>
         );
+    }
+
+    cancel = () => {
+        Alert.alert('Annuler',
+            'Êtes-vous sur de vouloir annuler toutes vos modification?',
+        [
+            { text: 'Oui', onPress: () => this.goBack(StateBack.CANCEL) },
+            { text: 'Non' },
+        ])
     }
 
     goBack = (stateBack) => {

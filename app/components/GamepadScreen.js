@@ -47,8 +47,7 @@ class GamepadScreen extends React.Component {
       return (<Gamepad style={[styles.editor]} />);
     }
   }
-
-
+  
   render() {
     return (
       <View style={styles.main}>
