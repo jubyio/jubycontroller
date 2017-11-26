@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { saveGamepad, unlockOrientation } from '../actions';
+import { saveGamepad, unlockOrientation, editControl } from '../actions';
 import { StateBack } from '../constants';
 
 // const GamepadEditButtons = ({ isInEdit, navigation, switchToEdit, gamepad, saveGamepad, unlockOrientation }) => {
@@ -51,10 +51,12 @@ class GamepadEditButtons extends React.Component {
                 switchToEdit();
                 break;
             case StateBack.CANCEL:
-                if (JSON.stringify(this.state.oldGamepad) !== JSON.stringify(this.props.gamepad) && !this.props.gamepad.isNew) {
-                    this.props.saveGamepad(this.state.oldGamepad);
-                }
                 switchToEdit();
+                if (JSON.stringify(this.state.oldGamepad) !== JSON.stringify(this.props.gamepad) && !this.props.gamepad.isNew) {
+                    this.state.oldGamepad.controls.forEach(control => {
+                        this.props.editControl(control);
+                    })
+                }
                 break;
             default:
                 break;
@@ -98,6 +100,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     saveGamepad: (gamepad) => dispatch(saveGamepad(gamepad)),
+    editControl: (control) => dispatch(editControl(control)),
     unlockOrientation: () => dispatch(unlockOrientation())
 })
 

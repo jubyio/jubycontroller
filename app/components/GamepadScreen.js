@@ -7,7 +7,6 @@ import GamepadEditor from './GamepadEditor';
 import Gamepad from './Gamepad';
 import GamepadEditButtons from './GamepadEditButtons';
 
-import { SAVE_GAMEPAD, CANCEL_GAMEPAD } from '../constants';
 import { saveGamepad, lockToLandscape, unlockOrientation } from '../actions';
 
 class GamepadScreen extends React.Component {
