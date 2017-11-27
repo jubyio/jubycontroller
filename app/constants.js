@@ -20,3 +20,9 @@ export const ControlTypes = {
     STICK: 'STICK',
     BUTTON: 'BUTTON'
 }
+
+export const StateBack = {
+    EXIT: 'EXIT',
+    EXITEDITING: 'EXITEDITING',
+    CANCEL: 'CANCEL'
+}

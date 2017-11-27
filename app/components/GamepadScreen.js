@@ -7,7 +7,6 @@ import GamepadEditor from './GamepadEditor';
 import Gamepad from './Gamepad';
 import GamepadEditButtons from './GamepadEditButtons';
 
-import { SAVE_GAMEPAD, CANCEL_GAMEPAD } from '../constants';
 import { saveGamepad, lockToLandscape, unlockOrientation } from '../actions';
 
 class GamepadScreen extends React.Component {
@@ -28,7 +27,7 @@ class GamepadScreen extends React.Component {
   }
 
   switchToEdit = () => {
-    this.setState({ isInEdit: true });
+    this.setState({ isInEdit: !this.state.isInEdit });
   }
 
   renderValidateEditButton = () => {
@@ -48,8 +47,7 @@ class GamepadScreen extends React.Component {
       return (<Gamepad style={[styles.editor]} />);
     }
   }
-
-
+  
   render() {
     return (
       <View style={styles.main}>

@@ -72,7 +72,8 @@ export const controlValueChanged = (control) => (
 export const initGamepad = () => ({
     id: uuid(),
     name: 'Nouveau gamepad',
-    controls: []
+    controls: [],
+    isNew: true
 })
 
 export const initControl = (type , window) => ({

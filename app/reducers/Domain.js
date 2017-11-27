@@ -11,6 +11,7 @@ const domain = (state = { gamepads: [] }, action) => {
             if (!action.gamepad.id) {
                 action.gamepad.id = uuid();
             }
+            action.gamepad.isNew = false;
             index = state.gamepads.findIndex(g => g.id == action.gamepad.id);
             if (index >= 0) {
                 _state = update(state, {
