@@ -7,7 +7,7 @@ import update from 'immutability-helper';
 import Stick from './Stick'
 import PadButton from './PadButton';
 import { ControlTypes } from '../constants';
-import { editControl } from '../actions';
+import { editControl, init } from '../actions';
 
 import { getTouches, getScale, isMultiTouch } from '../utils/events';
 import { distance } from '../utils/math';
@@ -24,6 +24,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
             selected: null,
             selectedRef: null,
         };
+        this.props.init();
     }
 
     componentWillMount() {
@@ -182,7 +183,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    editControl: (control) => dispatch(editControl(control))
+    editControl: (control) => dispatch(editControl(control)),
+    init: () => dispatch(init())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Gamepad);

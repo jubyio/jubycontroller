@@ -7,9 +7,15 @@ import {
     EDIT_CONTROL,
     ADD_CONTROL,
     UNLOCK_ORIENTATION,
-    STICK_VALUE_CHANGED,
+    SEND_COMMAND,
+    VALUE_SENT,
     BUTTON_PRESSED,
-    ControlTypes
+    ControlTypes,
+    INIT,
+    CONNECTED,
+    DISCONNECT,
+    DISCONNECTED
+    
 } from '../constants';
 import uuid from 'uuid/v4';
 
@@ -61,13 +67,48 @@ export const unlockOrientation = () => (
 )
 
 //Runtime
-export const controlValueChanged = (control) => (
+export const sendCommand = (control) => (
     {
-        type: STICK_VALUE_CHANGED,
+        type: SEND_COMMAND,
         control
     }
 )
 
+export const valueSent = (isOk) => (
+    {
+        type : VALUE_SENT,
+        isOK
+    }
+)
+
+export const connected = (isOk) => (
+    {
+        type: CONNECTED,
+        isOk
+    }
+)
+
+export const init = () => (
+    {
+        type: INIT
+    }
+)
+
+export const disconnected = (isOk) => (
+    {
+        type: DISCONNECTED,
+        isOk
+    }
+)
+
+export const disconnect = () => (
+    {
+        type: DISCONNECT
+    }
+)
+
+
+ 
 //Helpers
 export const initGamepad = () => ({
     id: uuid(),

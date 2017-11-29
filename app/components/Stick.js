@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
+import { sendCommand } from '../actions';
 
 import { Slider } from 'react-native-elements';
 
@@ -20,6 +21,7 @@ class Stick extends React.Component {
         this.setState(update(this.state, {
             value: { $set: value}
         }));
+        this.props.sendCommand(this.props.stick.name, value)
         console.log(`value to send: ${value} for command: ${this.props.stick.name}`);
     }
 
@@ -49,7 +51,7 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-
+    sendCommand: (name, value) => dispatch(sendCommand(name, value))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stick);

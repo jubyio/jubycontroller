@@ -1,11 +1,24 @@
 import { ofType } from 'redux-observable';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/mapTo';
-import { CONTROL_VALUE_CHANGED, CONNECT } from '../constants';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/do';
+import { SEND_COMMAND, INIT, DISCONNECT } from '../constants';
+import {sendCommand, init, close} from '../utils/mqttRedux';
+import { connected, valueSent, disconnected } from '../actions';
 
-export const commandEpic = action$ => 
-    action$.ofType(CONTROL_VALUE_CHANGED)
-        .mapTo({type: 'toto'});
 
-export const connectEpic = action$ => 
-    action$.ofType(CONNECT)
+export const commandEpic = action$ =>
+    action$.ofType(SEND_COMMAND)
+        .mergeMap(action => sendCommand(action.name, action.value))
+        .mapTo(error => valueSent(error == null));
+
+export const connectEpic = action$ =>
+    action$.ofType(INIT)
+        .mergeMap(() => init())
+        .mapTo(connected())
+
+export const disconnectEpic = actions$ =>
+    actions$.ofType(DISCONNECT)
+        .mergeMap(() => close())
+        .mapTo(disconnected())

@@ -1,36 +1,43 @@
-import { connect } from 'mqtt';
+import * as mqtt from './browserMqtt';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 import { publish } from 'rxjs/operators/publish';
 
-export default class MqttRedux {
 
-    constructor(config) {
-        this.serverUri = config.serverUri || 'ws://192.168.0.1';
-        this.client = null;
-    }
+var mqttClient
 
-    init() {
-        this.client = connect([{ host: '192.168.0.1', keepalive: 60, protocolId: 'WS' }])
-        this.client.on('connect', () => {
-            this.client.subscribe('DIGI/PING');
-            this.client.publish('DIGI/START', 'c')
-        });
+export const init = () => {
+    debugger;
+    mqttClient = mqtt.connect({ hostname: '192.168.0.1', keepalive: 60 })
+    mqttClient.on('connect', () => {
+        debugger;
+        mqttClient.subscribe('DIGI/PING');
+        mqttClient.publish('DIGI/INIT', 'c');
+        console.log('connect');
+    });
 
-        this.client.on('message', (topic, payload)=>{
+    mqttClient.on('message', (topic, payload) => {
+        if (topic === 'DIGI/PING') {
+            setTimeout(() => {
+                mqttClient.publish('DIGI/PONG', 'c')
+            }, 5000)
 
-        });
-    }
+        }
+    });
 
-    close() {
-        this.client.publish('DIGI/STOP')
-    }
+    return Observable.of(true);
+}
 
-    sendCommand(command) {
-        
-        let publishObs = Observable.bindCallback(this.client.publish);
-        return publishObs(`DIGI/${command.name}`, command.value);
-        
-    }
+export const close = () => {
+    let publishObs = Observable.bindCallback(mqttClient.publish);
+    return publishObs('DIGI/STOP', '')
+}
 
+export const sendCommand = (command) => {
+
+    let publishObs = Observable.bindCallback(mqttClient.publish);
+    return publishObs(`DIGI/${command.name}`, command.value);
 
 }
+
+
