@@ -51,7 +51,8 @@ class Stick extends React.Component {
 
     render() {
         const { stick } = this.props;
-        return (<View style={{ width: stick.width, height: stick.height + 20 }}>
+        const height = stick.label ? stick.height + 20 : stick.height;
+        return (<View style={{ width: stick.width, height: height }}>
             <Slider thumbStyle={{ backgroundColor: stick.activeColor }} onValueChange={this.onChange} onSlidingComplete={this.onReleaseTouch}
                 value={this.state.value} minimumValue={stick.minValue && stick.maxValue ? stick.minValue : 0}
                 maximumValue={stick.maxValue && stick.minValue ? stick.maxValue : 1} />
