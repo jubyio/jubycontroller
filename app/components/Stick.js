@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
-import { sendCommand } from '../actions';
+
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/debounceTime';
 
 import { Slider } from 'react-native-elements';
 
-import { editControl } from '../actions';
+import { sendCommand, editControl } from '../actions';
+
 
 class Stick extends React.Component {
     constructor(props) {
@@ -15,19 +18,34 @@ class Stick extends React.Component {
         this.state = {
             value: props.stick.defaultValue
         }
+        this.sendOnChange$ = new Subject();
+    }
+
+    componentDidMount(){
+        this.subscription = this.sendOnChange$
+            .debounceTime(100)
+            .subscribe(value => {
+                this.props.sendCommand(this.props.stick.name, value.toFixed(0))
+                console.log(`value to send: ${value.toFixed(0)} for command: ${this.props.stick.name}`);
+            });
+    }
+
+    componentWillUnmount(){
+        this.subscription.unsubscribe();
     }
 
     onChange = (value) => {
         this.setState(update(this.state, {
-            value: { $set: value}
+            value: { $set: value }
         }));
-        this.props.sendCommand(this.props.stick.name, value)
-        console.log(`value to send: ${value} for command: ${this.props.stick.name}`);
+        this.sendOnChange$.next(value);
+        //this.props.sendCommand(this.props.stick.name, value.toFixed(0))
+        
     }
 
     onReleaseTouch = () => {
         if (this.props.stick.keepValue) {
-            this.setState({...this.state, value: this.props.stick.defaultValue});
+            this.setState({ ...this.state, value: this.props.stick.defaultValue });
         }
     }
 

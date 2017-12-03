@@ -67,17 +67,18 @@ export const unlockOrientation = () => (
 )
 
 //Runtime
-export const sendCommand = (control) => (
+export const sendCommand = (name, value) => (
     {
         type: SEND_COMMAND,
-        control
+        name: name,
+        value: value
     }
 )
 
 export const valueSent = (isOk) => (
     {
         type : VALUE_SENT,
-        isOK
+        isOk
     }
 )
 
