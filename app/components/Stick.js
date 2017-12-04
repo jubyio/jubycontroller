@@ -44,8 +44,9 @@ class Stick extends React.Component {
     }
 
     onReleaseTouch = () => {
-        if (this.props.stick.keepValue) {
+        if (!this.props.stick.keepValue) {
             this.setState({ ...this.state, value: this.props.stick.defaultValue });
+            this.sendOnChange$.next(this.props.stick.defaultValue);
         }
     }
 
