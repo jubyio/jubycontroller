@@ -130,7 +130,6 @@ class GamepadEditor extends React.Component {
         }
         return this.saveControl(property, null);
     }
-    }
 
     renderPadsMenu = () => {
         if (this.state.isMenuOpen) {
