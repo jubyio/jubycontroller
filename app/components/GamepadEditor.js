@@ -151,7 +151,9 @@ class GamepadEditor extends React.Component {
                         <ScrollView>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Label</Text>
-                                <TextInput style={styles.input} defaultValue={control.label} onBlur={event => this.saveControl('label', event.nativeEvent.text)} placeholder='Label' autoCapitalize='none' autoCorrect={false} />
+                                <TextInput style={styles.input} defaultValue={control.label} 
+                                onBlur={event => this.saveControl('label', event.nativeEvent.text)}
+                                placeholder='Label' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Commande</Text>

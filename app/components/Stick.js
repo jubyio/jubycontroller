@@ -1,29 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text } from 'react-native';
+import { View, Text, Slider } from 'react-native';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
 
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 
-import { Slider } from 'react-native-elements';
+// import { Slider } from 'react-native-elements';
 
 import { sendCommand, editControl } from '../actions';
 
 
 class Stick extends React.Component {
+    value = null;
     constructor(props) {
         super(props);
-        this.state = {
-            value: props.stick.defaultValue
-        }
+        this.value = this.props.stick.defaultValue;
         this.sendOnChange$ = new Subject();
     }
 
     componentDidMount(){
         this.subscription = this.sendOnChange$
-            .debounceTime(100)
+            .debounceTime(50)
             .subscribe(value => {
                 this.props.sendCommand(this.props.stick.name, value.toFixed(0))
                 console.log(`value to send: ${value.toFixed(0)} for command: ${this.props.stick.name}`);
@@ -35,17 +34,15 @@ class Stick extends React.Component {
     }
 
     onChange = (value) => {
-        this.setState(update(this.state, {
-            value: { $set: value }
-        }));
         this.sendOnChange$.next(value);
         //this.props.sendCommand(this.props.stick.name, value.toFixed(0))
         
     }
 
     onReleaseTouch = () => {
-        if (!this.props.stick.keepValue) {
-            this.setState({ ...this.state, value: this.props.stick.defaultValue });
+        if (this.props.stick.keepValue) {
+            this.value = this.props.stick.defaultValue;
+            this._slider.setNativeProps({ value: this.props.stick.defaultValue});
             this.sendOnChange$.next(this.props.stick.defaultValue);
         }
     }
@@ -54,8 +51,8 @@ class Stick extends React.Component {
         const { stick } = this.props;
         const height = stick.label ? stick.height + 20 : stick.height;
         return (<View style={{ width: stick.width, height: height }}>
-            <Slider thumbStyle={{ backgroundColor: stick.activeColor }} onValueChange={this.onChange} onSlidingComplete={this.onReleaseTouch}
-                value={this.state.value} minimumValue={stick.minValue && stick.maxValue ? stick.minValue : 0}
+            <Slider ref={slider => this._slider = slider} thumbTintColor={stick.activeColor} onValueChange={this.onChange} onSlidingComplete={this.onReleaseTouch}
+                value={this.value} minimumValue={stick.minValue && stick.maxValue ? stick.minValue : 0}
                 maximumValue={stick.maxValue && stick.minValue ? stick.maxValue : 1} />
             <Text style={{ flex: 1, textAlign: 'center' }}>{stick.label}</Text>
         </View>);
