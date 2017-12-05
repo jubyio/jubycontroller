@@ -124,6 +124,14 @@ class GamepadEditor extends React.Component {
         this.props.editControl(state.control);
     }
 
+    saveInputNumber = (property, value) => {
+        if (value) {
+            return this.saveControl(property, parseInt(value, 10));
+        }
+        return this.saveControl(property, null);
+    }
+    }
+
     renderPadsMenu = () => {
         if (this.state.isMenuOpen) {
             return (
@@ -151,9 +159,7 @@ class GamepadEditor extends React.Component {
                         <ScrollView>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Label</Text>
-                                <TextInput style={styles.input} defaultValue={control.label} 
-                                onChange={event => this.saveControl('label', event.nativeEvent.text)}
-                                placeholder='Label' autoCapitalize='none' autoCorrect={false} />
+                                <TextInput style={styles.input} defaultValue={control.label} onChange={event => this.saveControl('label', event.nativeEvent.text)} placeholder='Label' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Commande</Text>
@@ -161,15 +167,15 @@ class GamepadEditor extends React.Component {
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur minimun</Text>
-                                <TextInput style={styles.input} defaultValue={control.minValue != null ? `${control.minValue}` : ''} onChange={event => this.saveControl('minValue', parseInt(event.nativeEvent.text, 10))} placeholder='Valeur minimun' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.minValue != null ? `${control.minValue}` : ''} onChange={event => this.saveInputNumber('minValue', event.nativeEvent.text) } placeholder='Valeur minimun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur maximun</Text>
-                                <TextInput style={styles.input} defaultValue={control.maxValue != null ? `${control.maxValue}` : ''} onChange={event => this.saveControl('maxValue', parseInt(event.nativeEvent.text, 10))} placeholder='Valeur maximun' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.maxValue != null ? `${control.maxValue}` : ''} onChange={event => this.saveInputNumber('maxValue', event.nativeEvent.text) } placeholder='Valeur maximun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} defaultValue={control.defaultValue != null ? `${control.defaultValue}` : ''} onChange={event => this.saveControl('defaultValue', parseInt(event.nativeEvent.text), 10)} placeholder='Valeur par défault' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.defaultValue != null ? `${control.defaultValue}` : ''} onChange={event => this.saveInputNumber('defaultValue', event.nativeEvent.text) } placeholder='Valeur par défault' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
