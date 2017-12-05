@@ -46,7 +46,7 @@ export const close = () => {
 
 export const sendCommand = (topic, value) => {
     return Observable.fromPromise(new Promise((resolve, reject) => {
-        mqttClient.publish(`DIGI/${topic}`, value, (err) => {
+        mqttClient.publish(`DIGI/${topic}`, value, { qos: 0 }, (err) => {
             if (err == null) {
                 resolve(true);
             }
