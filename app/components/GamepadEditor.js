@@ -152,24 +152,24 @@ class GamepadEditor extends React.Component {
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Label</Text>
                                 <TextInput style={styles.input} defaultValue={control.label} 
-                                onBlur={event => this.saveControl('label', event.nativeEvent.text)}
+                                onChange={event => this.saveControl('label', event.nativeEvent.text)}
                                 placeholder='Label' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Commande</Text>
-                                <TextInput style={styles.input} defaultValue={control.name} onBlur={event => this.saveControl('name', event.nativeEvent.text)} placeholder='Commande' autoCapitalize='none' autoCorrect={false} />
+                                <TextInput style={styles.input} defaultValue={control.name} onChange={event => this.saveControl('name', event.nativeEvent.text)} placeholder='Commande' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur minimun</Text>
-                                <TextInput style={styles.input} defaultValue={control.minValue != null ? `${control.minValue}` : ''} onBlur={event => this.saveControl('minValue', parseInt(event.nativeEvent.text, 10))} placeholder='Valeur minimun' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.minValue != null ? `${control.minValue}` : ''} onChange={event => this.saveControl('minValue', parseInt(event.nativeEvent.text, 10))} placeholder='Valeur minimun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur maximun</Text>
-                                <TextInput style={styles.input} defaultValue={control.maxValue != null ? `${control.maxValue}` : ''} onBlur={event => this.saveControl('maxValue', parseInt(event.nativeEvent.text, 10))} placeholder='Valeur maximun' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.maxValue != null ? `${control.maxValue}` : ''} onChange={event => this.saveControl('maxValue', parseInt(event.nativeEvent.text, 10))} placeholder='Valeur maximun' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} defaultValue={control.defaultValue != null ? `${control.defaultValue}` : ''} onBlur={event => this.saveControl('defaultValue', parseInt(event.nativeEvent.text), 10)} placeholder='Valeur par défault' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.defaultValue != null ? `${control.defaultValue}` : ''} onChange={event => this.saveControl('defaultValue', parseInt(event.nativeEvent.text), 10)} placeholder='Valeur par défault' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
