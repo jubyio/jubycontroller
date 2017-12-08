@@ -84,11 +84,11 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         const newTouches = getTouches(event);
         if (newTouches.length !== initialTouches.length) {
             this.initialTouches = newTouches;
-        } else {
+        } /*else {
             if (isMultiTouch(event)) {
                 this.onPinch(event, refControl);
             }
-        }
+        }*/
         refControl.setNativeProps({
             style: { left: this.prevLeft + gestureState.dx, top: this.prevTop + gestureState.dy }
         });
