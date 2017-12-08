@@ -28,15 +28,17 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
     }
 
     componentWillMount() {
-        this.panResponder = PanResponder.create({
-            onStartShouldSetPanResponder: (evt, gestureState) => this.props.isInEditMode,
-            onStartShouldSetPanResponderCapture: (evt, gestureState) => this.props.isInEditMode,
-            onMoveShouldSetPanResponder: (evt, gestureState) => this.props.isInEditMode,
-            onMoveShouldSetPanResponderCapture: (evt, gestureState) => this.props.isInEditMode,
-            onPanResponderGrant: this.onMoveStart,
-            onPanResponderMove: this.onMove,
-            onPanResponderRelease: this.onMoveEnd
-        });
+        if (this.props.isInEditMode) {
+            this.panResponder = PanResponder.create({
+                onStartShouldSetPanResponder: (evt, gestureState) => this.props.isInEditMode,
+                onStartShouldSetPanResponderCapture: (evt, gestureState) => this.props.isInEditMode,
+                onMoveShouldSetPanResponder: (evt, gestureState) => this.props.isInEditMode,
+                onMoveShouldSetPanResponderCapture: (evt, gestureState) => this.props.isInEditMode,
+                onPanResponderGrant: this.onMoveStart,
+                onPanResponderMove: this.onMove,
+                onPanResponderRelease: this.onMoveEnd
+            });
+        }
     }
 
     onMoveStart = (event) => {
@@ -151,9 +153,9 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         return control;
     }
 
-    render() {
-        return (<View style={{ flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: '#a8a4a7' }} {...this.panResponder.panHandlers}>
-            {this.props.gamepad.controls.map((control) => {
+    renderContols = () => {
+        return (
+            this.props.gamepad.controls.map((control) => {
                 return (
                     <View ref={control.id} key={control.id} style={[{
                         position: 'absolute',
@@ -167,8 +169,21 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
                         {this.renderControl(control)}
                     </View>
                 )
-            })}
-        </View>);
+            })
+        );
+    }
+
+    render() {
+        var style = { flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: '#a8a4a7' };
+        if (this.props.isInEditMode) {
+            return (<View style={style} {...this.panResponder.panHandlers}>
+                {this.renderContols()}
+            </View>);
+        } else {
+            return (<View style={style}>
+                {this.renderContols()}
+            </View>);
+        }
     };
 }
 
