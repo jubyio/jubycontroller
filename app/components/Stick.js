@@ -22,7 +22,7 @@ class Stick extends React.Component {
 
     componentDidMount(){
         this.subscription = this.sendOnChange$
-            .debounceTime(50)
+            .debounceTime(100)
             .subscribe(value => {
                 this.props.sendCommand(this.props.stick.name, value.toFixed(0))
                 console.log(`value to send: ${value.toFixed(0)} for command: ${this.props.stick.name}`);
@@ -40,7 +40,7 @@ class Stick extends React.Component {
     }
 
     onReleaseTouch = () => {
-        if (this.props.stick.keepValue) {
+        if (!this.props.stick.keepValue) {
             this.value = this.props.stick.defaultValue;
             this._slider.setNativeProps({ value: this.props.stick.defaultValue});
             this.sendOnChange$.next(this.props.stick.defaultValue);
