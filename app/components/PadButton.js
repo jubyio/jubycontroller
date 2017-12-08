@@ -15,15 +15,16 @@ class PadButton extends React.Component {
     }
 
     onPress = () => {
+        console.log('press');
         const { button, isActive } = this.state;
         let value = button.value || button.defaultValue;
-        if (value === button.maxValue) {
+        if (value === button.maxValue && !button.keepValue) {
             value = button.minValue;
-        } else if (value === button.minValue) {
+        } else if (value === button.minValue && !button.keepValue) {
             value = button.maxValue;
         }
         this.setState(update(this.state, {
-            isActive: { $set: !isActive },
+            isActive: { $set: button.keepValue ? true : !isActive },
             button: {
                 value: { $set: value }
             }
@@ -36,7 +37,7 @@ class PadButton extends React.Component {
         return (
             <View>
                 <TouchableOpacity
-                    onPress={() => this.onPress}
+                    onPress={() => this.onPress()}
                     style={{
                         borderWidth: 1,
                         borderColor: 'rgba(0,0,0,0.2)',
