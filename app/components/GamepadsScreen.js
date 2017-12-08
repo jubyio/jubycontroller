@@ -17,12 +17,7 @@ import update from "immutability-helper";
 
 import GamepadList from "./GamepadList";
 
-import {
-  initGamepad,
-  editGamepad,
-  saveGamepad,
-  deleteGamepad
-} from "../actions";
+import { initGamepad, editGamepad, saveGamepad, deleteGamepad } from "../actions";
 
 class GamepadsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -64,17 +59,15 @@ class GamepadsScreen extends React.Component {
   };
 
   setModalVisible = visibility => {
-    this.setState(
-      update(this.state, {
-        modalVisible: { $set: visibility }
-      })
+    this.setState(update(this.state, {
+      modalVisible: { $set: visibility }
+    })
     );
   };
 
   saveGamepad = () => {
-    var gamepad = this.props.gamepads.find(
-      x => x.id === this.state.selectedGamepad.id
-    );
+    var gamepad = this.props.gamepads.find(x => x.id === this.state.selectedGamepad.id);
+    console.log(this.state);
     gamepad.name = this.state.text;
     const state = update(this.state, {
       selectedGamepad: { $set: null },
@@ -87,58 +80,21 @@ class GamepadsScreen extends React.Component {
   renderHeader = () => {
     if (this.state.selectedGamepad) {
       return (
-        <Header
-          backgroundColor="#5a83ce"
-          leftComponent={
-            <Icon
-              style={styles.leftButton}
-              name="arrow-back"
-              size={30}
-              color="#fff"
-              onPress={this.cleanSelectedGamepad}
-            />
-          }
-          centerComponent={{
-            text: this.state.selectedGamepad.name,
-            style: { color: "#fff", fontSize: 18 }
-          }}
+        <Header backgroundColor="#5a83ce"
+          leftComponent={<Icon style={styles.leftButton} name="arrow-back" size={30} color="#fff" onPress={this.cleanSelectedGamepad} />}
+          centerComponent={{ text: this.state.selectedGamepad.name, style: { color: "#fff", fontSize: 18 } }}
           rightComponent={
             <View style={styles.edit}>
-              <Icon
-                style={styles.rightButton}
-                name="create"
-                size={30}
-                color="#fff"
-                onPress={() => this.setModalVisible(!this.state.modalVisible)}
-              />
-              <Icon
-                style={styles.rightButton}
-                name="delete"
-                size={30}
-                color="#fff"
-                onPress={this.deleteGamepad}
-              />
-            </View>
-          }
+              <Icon style={styles.rightButton} name="create" size={30} color="#fff" onPress={() => this.setModalVisible(!this.state.modalVisible)} />
+              <Icon style={styles.rightButton} name="delete" size={30} color="#fff" onPress={this.deleteGamepad} />
+            </View>}
         />
       );
     } else {
       return (
         <Header
-          backgroundColor="#5a83ce"
-          centerComponent={{
-            text: "GAMEPADS",
-            style: { color: "#fff", fontSize: 18 }
-          }}
-          rightComponent={
-            <Icon
-              style={styles.rightButton}
-              name="add-circle-outline"
-              size={30}
-              color="#fff"
-              onPress={this.createNewGamepad}
-            />
-          }
+          backgroundColor="#5a83ce" centerComponent={{ text: "GAMEPADS", style: { color: "#fff", fontSize: 18 } }}
+          rightComponent={<Icon style={styles.rightButton} name="add-circle-outline" size={30} color="#fff" onPress={this.createNewGamepad} />}
         />
       );
     }
@@ -154,35 +110,22 @@ class GamepadsScreen extends React.Component {
           animationType="slide"
           transparent={false}
           visible={modalVisible}
-          onRequestClose={() => {}}
-        >
+          onRequestClose={() => { }} >
           <View style={styles.modal}>
             <View>
               <Text>Modifier le nom du gamepad</Text>
-              <TextInput
-                style={{ height: 40 }}
-                defaultValue={selectedGamepad.name}
-                onEndEditing={event =>
-                  this.setState(
-                    update(this.state, {
-                      text: { $set: event.nativeEvent.text }
-                    })
-                  )
-                }
-                placeholder="Nom"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
+              <TextInput style={{ height: 40 }} defaultValue={selectedGamepad.name}
+                onChange={event => this.setState(update(this.state, { text: { $set: event.nativeEvent.text } }))}
+                placeholder="Nom" autoCapitalize="none" autoCorrect={false} />
             </View>
             <View style={styles.actions}>
               <TouchableHighlight onPress={this.saveGamepad}>
                 <Text>Valider</Text>
               </TouchableHighlight>
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!modalVisible);
-                }}
-              >
+              <TouchableHighlight onPress={() => {
+                this.setState(update(this.state, { text: selectedGamepad.name }))
+                this.setModalVisible(!modalVisible);
+              }}>
                 <Text>Annuler</Text>
               </TouchableHighlight>
             </View>
@@ -196,12 +139,7 @@ class GamepadsScreen extends React.Component {
     return (
       <View style={styles.main}>
         {this.renderHeader()}
-        <GamepadList
-          selectedGamepad={this.state.selectedGamepad}
-          navigation={this.props.navigation}
-          style={styles.list}
-          onSelected={this.onSelected}
-        />
+        <GamepadList selectedGamepad={this.state.selectedGamepad} navigation={this.props.navigation} style={styles.list} onSelected={this.onSelected} />
         {this.renderEditModal()}
       </View>
     );
