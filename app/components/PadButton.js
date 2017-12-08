@@ -15,7 +15,6 @@ class PadButton extends React.Component {
     }
 
     onPress = () => {
-        console.log('press');
         const { button, isActive } = this.state;
         let value = button.value || button.defaultValue;
         if (value === button.maxValue && !button.keepValue) {
