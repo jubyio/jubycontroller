@@ -34,7 +34,6 @@ class Stick extends React.Component {
     }
 
     onChange = (value) => {
-        console.log('value stick change');
         this.sendOnChange$.next(value);
         //this.props.sendCommand(this.props.stick.name, value.toFixed(0))
 
