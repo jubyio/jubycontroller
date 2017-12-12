@@ -140,7 +140,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
 
     renderControl = (control) => {
         if (control.type == ControlTypes.STICK) {
-            return (<Stick id={control.id} />)
+            return (<Stick id={control.id} isInEditMode={this.props.isInEditMode} />)
         } else {
             return (<PadButton id={control.id} />)
         }

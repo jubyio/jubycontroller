@@ -20,7 +20,7 @@ class Stick extends React.Component {
         this.sendOnChange$ = new Subject();
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.subscription = this.sendOnChange$
             .debounceTime(50)
             .subscribe(value => {
@@ -29,20 +29,21 @@ class Stick extends React.Component {
             });
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.subscription.unsubscribe();
     }
 
     onChange = (value) => {
+        console.log('value stick change');
         this.sendOnChange$.next(value);
         //this.props.sendCommand(this.props.stick.name, value.toFixed(0))
-        
+
     }
 
     onReleaseTouch = () => {
         if (this.props.stick.keepValue) {
             this.value = this.props.stick.defaultValue;
-            this._slider.setNativeProps({ value: this.props.stick.defaultValue});
+            this._slider.setNativeProps({ value: this.props.stick.defaultValue });
             this.sendOnChange$.next(this.props.stick.defaultValue);
         }
     }
@@ -53,14 +54,16 @@ class Stick extends React.Component {
         return (<View style={{ width: stick.width, height: height }}>
             <Slider ref={slider => this._slider = slider} thumbTintColor={stick.activeColor} onValueChange={this.onChange} onSlidingComplete={this.onReleaseTouch}
                 value={this.value} minimumValue={stick.minValue && stick.maxValue ? stick.minValue : 0}
-                maximumValue={stick.maxValue && stick.minValue ? stick.maxValue : 1} />
+                maximumValue={stick.maxValue && stick.minValue ? stick.maxValue : 1}
+                disabled={this.props.isInEditMode} />
             <Text style={{ flex: 1, textAlign: 'center' }}>{stick.label}</Text>
         </View>);
     }
 }
 
 Stick.propTypes = {
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    isInEditMode: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => ({
