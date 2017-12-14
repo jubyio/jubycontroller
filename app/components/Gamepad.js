@@ -84,11 +84,11 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
         const newTouches = getTouches(event);
         if (newTouches.length !== initialTouches.length) {
             this.initialTouches = newTouches;
-        } else {
+        } /*else {
             if (isMultiTouch(event)) {
                 this.onPinch(event, refControl);
             }
-        }
+        }*/
         refControl.setNativeProps({
             style: { left: this.prevLeft + gestureState.dx, top: this.prevTop + gestureState.dy }
         });
@@ -140,7 +140,7 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
 
     renderControl = (control) => {
         if (control.type == ControlTypes.STICK) {
-            return (<Stick id={control.id} />)
+            return (<Stick id={control.id} isInEditMode={this.props.isInEditMode} />)
         } else {
             return (<PadButton id={control.id} />)
         }

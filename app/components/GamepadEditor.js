@@ -24,8 +24,7 @@ import Gamepad from './Gamepad';
 import { ADD_CONTROL, ControlTypes } from '../constants';
 import { initControl, addControl, editControl } from '../actions';
 
-import { Button, Icon, SideMenu } from 'react-native-elements';
-import { ColorWheel } from 'react-native-color-wheel';
+import { Button, Icon, SideMenu, ButtonGroup } from 'react-native-elements';
 import { ColorPalette } from './ColorPalette';
 
 class GamepadEditor extends React.Component {
@@ -131,6 +130,22 @@ class GamepadEditor extends React.Component {
         return this.saveControl(property, null);
     }
 
+    handleButtonGroup = (index) => {
+        var scale = this.state.control.scale;
+        if (index === 0) {
+            scale -= 0.25;
+        } else if (index === 1) {
+            scale += 0.25;
+        }
+        var state = update(this.state, {
+            control: {
+                scale : { $set: scale }
+            },
+        });
+        this.setState(state);
+        this.props.editControl(state.control);
+    }
+
     renderPadsMenu = () => {
         if (this.state.isMenuOpen) {
             return (
@@ -152,29 +167,31 @@ class GamepadEditor extends React.Component {
     renderSetting = () => {
         if (this.state.isSettingOpen) {
             const { control } = this.state;
+            const minValText = control.type === ControlTypes.Stick ? `Valeur minimun` : `Valeur active`;
+            const maxValText = control.type === ControlTypes.Stick ? `Valeur maximun` : `Valeur inactive`;
             return (
                 <View style={styles.sideMenu}>
                     <View style={[styles.controls, styles.form]}>
                         <ScrollView>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Label</Text>
-                                <TextInput style={styles.input} defaultValue={control.label} onChange={event => this.saveControl('label', event.nativeEvent.text)} placeholder='Label' autoCapitalize='none' autoCorrect={false} />
+                                <TextInput style={styles.input} defaultValue={control.label} underlineColorAndroid="transparent" onChange={event => this.saveControl('label', event.nativeEvent.text)} placeholder='Label' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Commande</Text>
-                                <TextInput style={styles.input} defaultValue={control.name} onChange={event => this.saveControl('name', event.nativeEvent.text)} placeholder='Commande' autoCapitalize='none' autoCorrect={false} />
+                                <TextInput style={styles.input} defaultValue={control.name} underlineColorAndroid="transparent" onChange={event => this.saveControl('name', event.nativeEvent.text)} placeholder='Commande' autoCapitalize='none' autoCorrect={false} />
                             </View>
                             <View style={styles.formGroup}>
-                                <Text style={styles.label}>Valeur minimun</Text>
-                                <TextInput style={styles.input} defaultValue={control.minValue != null ? `${control.minValue}` : ''} onChange={event => this.saveInputNumber('minValue', event.nativeEvent.text) } placeholder='Valeur minimun' keyboardType="numeric" />
+                                <Text style={styles.label}>{minValText}</Text>
+                                <TextInput style={styles.input} defaultValue={control.minValue != null ? `${control.minValue}` : ''} underlineColorAndroid="transparent" onChange={event => this.saveInputNumber('minValue', event.nativeEvent.text)} placeholder={minValText} keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
-                                <Text style={styles.label}>Valeur maximun</Text>
-                                <TextInput style={styles.input} defaultValue={control.maxValue != null ? `${control.maxValue}` : ''} onChange={event => this.saveInputNumber('maxValue', event.nativeEvent.text) } placeholder='Valeur maximun' keyboardType="numeric" />
+                                <Text style={styles.label}>{maxValText}</Text>
+                                <TextInput style={styles.input} defaultValue={control.maxValue != null ? `${control.maxValue}` : ''} underlineColorAndroid="transparent" onChange={event => this.saveInputNumber('maxValue', event.nativeEvent.text)} placeholder={maxValText} keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} defaultValue={control.defaultValue != null ? `${control.defaultValue}` : ''} onChange={event => this.saveInputNumber('defaultValue', event.nativeEvent.text) } placeholder='Valeur par défault' keyboardType="numeric" />
+                                <TextInput style={styles.input} defaultValue={control.defaultValue != null ? `${control.defaultValue}` : ''} underlineColorAndroid="transparent" onChange={event => this.saveInputNumber('defaultValue', event.nativeEvent.text)} placeholder='Valeur par défault' keyboardType="numeric" />
                             </View>
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
@@ -218,6 +235,14 @@ class GamepadEditor extends React.Component {
                                     }
                                 </TouchableHighlight>
                             </View>
+                            <View style={styles.formGroup}>
+                                <Text style={styles.label}>Taille</Text>
+                                <ButtonGroup
+                                    onPress={this.handleButtonGroup}
+                                    buttons={['-', '+']}
+                                    containerStyle={{ flex: 0.5, height: 30, marginLeft: 0, marginRight: 0 }}
+                                />
+                            </View>
                         </ScrollView>
                         {this.renderModalColorPicker()}
                     </View>
@@ -237,7 +262,7 @@ class GamepadEditor extends React.Component {
             return (
                 <Modal style={{ flex: 1, backgroundColor: 'white' }} animationType='none'
                     transparent={false} visible={this.state.modalVisible} supportedOrientations={['portrait', 'landscape']}
-                    onRequestClose={() => { console.log("Modal has been closed.")} } >
+                    onRequestClose={() => { console.log("Modal has been closed.") }} >
                     <View style={{ flex: 1, flexDirection: 'column', padding: 20 }}>
                         <Text style={{ color: 'black', fontWeight: 'bold' }}>
                             Couleur {this.state.colorProperty == 'activeColor' ? 'active' : 'inactive'}
@@ -332,7 +357,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        marginTop: 5
+        paddingTop: 5
     },
     label: {
         flex: 0.5,
@@ -341,7 +366,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     input: {
-        flex: 0.5
+        flex: 0.5,
+        padding: 0,
+        height: 20
     },
     item: {
         height: 50

@@ -44,7 +44,7 @@ class GamepadScreen extends React.Component {
     if (this.state.isInEdit) {
       return (<GamepadEditor style={[styles.editor]}  />);
     } else {
-      return (<Gamepad style={[styles.editor]} />);
+      return (<Gamepad style={[styles.editor]} isInEditMode={false} />);
     }
   }
   
