@@ -9,6 +9,7 @@ import AppWithNavigationState from './navigators/AppNavigator';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import rootEpic from './epics';
 
+
 require('../global');
 
 const epicMiddleware = createEpicMiddleware(rootEpic);
@@ -28,5 +29,9 @@ export default class App extends React.Component {
         <AppWithNavigationState />
       </Provider>
     );
+  }
+
+  componentWillMount(){
+    global.Buffer = null
   }
 }

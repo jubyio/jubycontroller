@@ -4,6 +4,11 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import update from 'immutability-helper';
 import { connect } from 'react-redux';
 
+import * as net from 'react-native-tcp';
+import { HC_URL } from '../constants';
+
+var Buffer = require('buffer').Buffer;
+
 class PadButton extends React.Component {
     constructor(props) {
         super(props);
@@ -28,20 +33,24 @@ class PadButton extends React.Component {
                 value: { $set: value }
             }
         }));
-        sendCommand(button.name, value.toFixed(0));
+        this.sendCommand(button.name, value.toFixed(0));
         console.log(`value to send: ${value} for command: ${button.name}`);
     }
 
     sendCommand = (name, value) => {
         var client = net.createConnection(9999, HC_URL);
         client.on('connect', () => {
-            console.log('connected');
-        }).on('data', (data) => {
-            if (data != 'ok') { }
-            console.log(data);
+            console.log('===== connected ======');
+        });
+        client.on('data', (data) => {
+            if (data != 'ok') { console.log('====== OK ======')}
+            client.destroy();
+        });
+        client.on('error', (error) => {
+            console.log(`====== ERROR COMMUNICATION:  ${error} ======`)
         })
 
-        client.write(`${name}:${value}`, 'utf8');
+        client.write(Buffer.from(`${name}:${value}`, 'utf8'));
     }
 
     render() {
