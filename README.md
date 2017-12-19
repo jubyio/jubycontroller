@@ -20,3 +20,15 @@ Android: `react-native run-android`
 You can't debug the application with `react-native tools` in `vs code`.
 
 Because we use `react-native-tcp` [package](https://github.com/PeelTechnologies/react-native-tcp) and the extension `react-native tools` use `process browserify` but `rect-native tools` use `process nodejs` and this make a error when launch the debugger
+
+# Release
+
+## Android
+
+For Android you can generate a signed APK follow this [instructions](https://facebook.github.io/react-native/docs/signed-apk-android.html)
+
+But we add a keystore and run the following in terminal
+
+```
+cd android && ./gradlew assembleRelease
+```
