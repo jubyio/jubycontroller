@@ -173,9 +173,6 @@ class GamepadEditor extends React.Component {
                 minValText = `Valeur active`;
                 maxValText = `Valeur inactive`;
             }
-            console.log(`control : ${control.type}`);
-            console.log(`ControlTypes.STICK : ${ControlTypes.STICK}`);
-            console.log(`maxValText ${maxValText}`);
             return (
                 <View style={styles.sideMenu}>
                     <View style={[styles.controls, styles.form]}>
