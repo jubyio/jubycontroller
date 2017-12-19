@@ -379,8 +379,12 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 0.5,
-        padding: 0,
-        height: 20
+        ...Platform.select({
+            android: {
+                padding: 0,
+                height: 20
+            }
+        }),
     },
     item: {
         height: 50
