@@ -14,6 +14,9 @@ import { HC_URL } from '../constants';
 
 import { sendCommand, editControl } from '../actions';
 
+var Buffer = require('buffer').Buffer;
+global.Buffer = global.Buffer || Buffer;
+
 
 class Stick extends React.Component {
     value = null;
@@ -27,7 +30,7 @@ class Stick extends React.Component {
         this.subscription = this.sendOnChange$
             .debounceTime(100)
             .subscribe(value => {
-                this.sendCommand(this.stick.name, value.toFixed(0));
+                this.sendCommand(this.props.stick.name, value.toFixed(0));
                 console.log(`value to send: ${value.toFixed(0)} for command: ${this.props.stick.name}`);
             });
     }
@@ -37,6 +40,7 @@ class Stick extends React.Component {
     }
 
     onChange = (value) => {
+        console.log(`value : ${value}`)
         this.sendOnChange$.next(value);
         //this.props.sendCommand(this.props.stick.name, value.toFixed(0))
 
@@ -65,13 +69,17 @@ class Stick extends React.Component {
     sendCommand = (name, value) => {
         var client = net.createConnection(9999, HC_URL);
         client.on('connect', () => {
-            console.log('connected');
-        }).on('data', (data) => {
-            if (data != 'ok') { }
-            console.log(data);
+            console.log('===== connected ======');
+        });
+        client.on('data', (data) => {
+            if (data != 'ok') { console.log('====== OK ======')}
+            client.destroy();
+        });
+        client.on('error', (error) => {
+            console.log(`====== ERROR COMMUNICATION:  ${error} ======`)
         })
 
-        client.write(`${name}:${value}`, 'utf8');
+        client.write(Buffer.from(`${name}:${value}`, 'utf8'));
     }
 }
 
