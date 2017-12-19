@@ -167,8 +167,15 @@ class GamepadEditor extends React.Component {
     renderSetting = () => {
         if (this.state.isSettingOpen) {
             const { control } = this.state;
-            const minValText = control.type === ControlTypes.Stick ? `Valeur minimun` : `Valeur active`;
-            const maxValText = control.type === ControlTypes.Stick ? `Valeur maximun` : `Valeur inactive`;
+            const minValText =  `Valeur minimun`;
+            const maxValText = `Valeur maximun`;
+            if (control.type === ControlTypes.BUTTON) {
+                minValText = `Valeur active`;
+                maxValText = `Valeur inactive`;
+            }
+            console.log(`control : ${control.type}`);
+            console.log(`ControlTypes.STICK : ${ControlTypes.STICK}`);
+            console.log(`maxValText ${maxValText}`);
             return (
                 <View style={styles.sideMenu}>
                     <View style={[styles.controls, styles.form]}>
