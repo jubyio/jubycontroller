@@ -12,6 +12,9 @@ import { editControl, init } from '../actions';
 import { getTouches, getScale, isMultiTouch } from '../utils/events';
 import { distance } from '../utils/math';
 
+import * as net from 'react-native-tcp';
+global.Buffer = require('buffer').Buffer;
+
 class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) => {
     constructor(props) {
         super(props);
@@ -24,7 +27,8 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
             selected: null,
             selectedRef: null,
         };
-        this.props.init();
+        this.count = 0;
+        //this.props.init();
     }
 
     componentWillMount() {
@@ -39,6 +43,28 @@ class Gamepad extends React.Component {//= ({ gamepad, isInEditMode = false }) =
                 onPanResponderRelease: this.onMoveEnd
             });
         }
+
+       
+
+        this.t = setInterval(this.sendValues, 50);
+
+    }
+
+    sendValues = () => {
+        this.client = net.createConnection(9999, '172.20.10.8');
+        this.client.on('connect', () => {
+            console.log('connected');
+        }).on('data', (data) => {
+            console.log(data);
+        })
+
+        if (this.count % 2 == 0) {
+            this.client.write(Buffer.from('27:1500;22:0', 'utf8'));
+        } else {
+            this.client.write(Buffer.from('27:0;22:1500'));
+        }
+        this.count++;
+        
     }
 
     onMoveStart = (event) => {
@@ -194,7 +220,7 @@ Gamepad.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-    gamepad: state.config.gamepad
+    gamepad: state.config.gamepad,
 })
 
 const mapDispatchToProps = (dispatch) => ({

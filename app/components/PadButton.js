@@ -28,7 +28,20 @@ class PadButton extends React.Component {
                 value: { $set: value }
             }
         }));
+        sendCommand(button.name, value.toFixed(0));
         console.log(`value to send: ${value} for command: ${button.name}`);
+    }
+
+    sendCommand = (name, value) => {
+        var client = net.createConnection(9999, HC_URL);
+        client.on('connect', () => {
+            console.log('connected');
+        }).on('data', (data) => {
+            if (data != 'ok') { }
+            console.log(data);
+        })
+
+        client.write(`${name}:${value}`, 'utf8');
     }
 
     render() {

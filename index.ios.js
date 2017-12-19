@@ -3,6 +3,7 @@
  * https://github.com/facebook/react-native
  * @flow
  */
+
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -12,5 +13,6 @@ import {
 } from 'react-native';
 import App from './app/App';
 
+import './global';
 
 AppRegistry.registerComponent('jubycontroller', () => App);
