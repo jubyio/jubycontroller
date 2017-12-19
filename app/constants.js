@@ -16,10 +16,13 @@ export const DISCONNECTED = 'DISCONNECTED';
 export const PING = 'PING';
 export const PONG = 'PONG';
 export const VALUE_SENT = 'VALUE_SENT';
+export const HC_URL = '192.168.0.1';
 
 //Device features
 export const LOCK_LANDSCAPE = 'LOCK_LANDSCAPE';
 export const UNLOCK_ORIENTATION = 'UNLOCK_ORIENTATIO';
+
+
 
 export const ControlTypes = {
     STICK: 'STICK',

@@ -6,6 +6,9 @@ import update from 'immutability-helper';
 
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
+import * as net from 'react-native-tcp';
+
+import { HC_URL } from '../constants';
 
 // import { Slider } from 'react-native-elements';
 
@@ -24,7 +27,7 @@ class Stick extends React.Component {
         this.subscription = this.sendOnChange$
             .debounceTime(100)
             .subscribe(value => {
-                this.props.sendCommand(this.props.stick.name, value.toFixed(0))
+                this.sendCommand(this.stick.name, value.toFixed(0));
                 console.log(`value to send: ${value.toFixed(0)} for command: ${this.props.stick.name}`);
             });
     }
@@ -58,6 +61,18 @@ class Stick extends React.Component {
             <Text style={{ flex: 1, textAlign: 'center' }}>{stick.label}</Text>
         </View>);
     }
+
+    sendCommand = (name, value) => {
+        var client = net.createConnection(9999, HC_URL);
+        client.on('connect', () => {
+            console.log('connected');
+        }).on('data', (data) => {
+            if (data != 'ok') { }
+            console.log(data);
+        })
+
+        client.write(`${name}:${value}`, 'utf8');
+    }
 }
 
 Stick.propTypes = {
@@ -70,7 +85,7 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    sendCommand: (name, value) => dispatch(sendCommand(name, value))
+    //sendCommand: (name, value) => dispatch(sendCommand(name, value))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stick);
