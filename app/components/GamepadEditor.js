@@ -189,10 +189,18 @@ class GamepadEditor extends React.Component {
                                 <Text style={styles.label}>{maxValText}</Text>
                                 <TextInput style={styles.input} defaultValue={control.maxValue != null ? `${control.maxValue}` : ''} underlineColorAndroid="transparent" onChange={event => this.saveInputNumber('maxValue', event.nativeEvent.text)} placeholder={maxValText} keyboardType="numeric" />
                             </View>
-                            <View style={styles.formGroup}>
-                                <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} defaultValue={control.defaultValue != null ? `${control.defaultValue}` : ''} underlineColorAndroid="transparent" onChange={event => this.saveInputNumber('defaultValue', event.nativeEvent.text)} placeholder='Valeur par défault' keyboardType="numeric" />
-                            </View>
+                            {
+                                (() => {
+                                    if (control.type === ControlTypes.STICK) {
+                                        return (
+                                            <View style={styles.formGroup}>
+                                                <Text style={styles.label}>Valeur par défault</Text>
+                                                <TextInput style={styles.input} defaultValue={control.defaultValue != null ? `${control.defaultValue}` : ''} underlineColorAndroid="transparent" onChange={event => this.saveInputNumber('defaultValue', event.nativeEvent.text)} placeholder='Valeur par défault' keyboardType="numeric" />
+                                            </View>
+                                        );
+                                    }
+                                })()
+                            }
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
                                 <Switch style={styles.input} value={control.keepValue} onValueChange={val => this.saveControl('keepValue', val)} />
