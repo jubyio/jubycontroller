@@ -15,7 +15,6 @@ import { HC_URL } from '../constants';
 import { sendCommand, editControl } from '../actions';
 
 var Buffer = require('buffer').Buffer;
-global.Buffer = global.Buffer || Buffer;
 
 
 class Stick extends React.Component {
