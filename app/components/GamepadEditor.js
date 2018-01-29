@@ -167,8 +167,12 @@ class GamepadEditor extends React.Component {
     renderSetting = () => {
         if (this.state.isSettingOpen) {
             const { control } = this.state;
-            const minValText = control.type === ControlTypes.Stick ? `Valeur minimun` : `Valeur active`;
-            const maxValText = control.type === ControlTypes.Stick ? `Valeur maximun` : `Valeur inactive`;
+            const minValText =  `Valeur minimun`;
+            const maxValText = `Valeur maximun`;
+            if (control.type === ControlTypes.BUTTON) {
+                minValText = `Valeur active`;
+                maxValText = `Valeur inactive`;
+            }
             return (
                 <View style={styles.sideMenu}>
                     <View style={[styles.controls, styles.form]}>
@@ -189,10 +193,18 @@ class GamepadEditor extends React.Component {
                                 <Text style={styles.label}>{maxValText}</Text>
                                 <TextInput style={styles.input} defaultValue={control.maxValue != null ? `${control.maxValue}` : ''} underlineColorAndroid="transparent" onChange={event => this.saveInputNumber('maxValue', event.nativeEvent.text)} placeholder={maxValText} keyboardType="numeric" />
                             </View>
-                            <View style={styles.formGroup}>
-                                <Text style={styles.label}>Valeur par défault</Text>
-                                <TextInput style={styles.input} defaultValue={control.defaultValue != null ? `${control.defaultValue}` : ''} underlineColorAndroid="transparent" onChange={event => this.saveInputNumber('defaultValue', event.nativeEvent.text)} placeholder='Valeur par défault' keyboardType="numeric" />
-                            </View>
+                            {
+                                (() => {
+                                    if (control.type === ControlTypes.STICK) {
+                                        return (
+                                            <View style={styles.formGroup}>
+                                                <Text style={styles.label}>Valeur par défault</Text>
+                                                <TextInput style={styles.input} defaultValue={control.defaultValue != null ? `${control.defaultValue}` : ''} underlineColorAndroid="transparent" onChange={event => this.saveInputNumber('defaultValue', event.nativeEvent.text)} placeholder='Valeur par défault' keyboardType="numeric" />
+                                            </View>
+                                        );
+                                    }
+                                })()
+                            }
                             <View style={styles.formGroup}>
                                 <Text style={styles.label}>Garde la valeur</Text>
                                 <Switch style={styles.input} value={control.keepValue} onValueChange={val => this.saveControl('keepValue', val)} />
@@ -367,8 +379,12 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 0.5,
-        padding: 0,
-        height: 20
+        ...Platform.select({
+            android: {
+                padding: 0,
+                height: 20
+            }
+        }),
     },
     item: {
         height: 50
